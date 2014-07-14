@@ -47,15 +47,12 @@ define(function(require) {
 	//VIEW INSTANCIATION
 	LearnerAssistant.views['results'] = new LearnerassistantResultsView();
 
-
 	//GLOBAL EVENT LISTENERS
-	Adapt.once("assessment:quizSet", function(questionModel) {
-		//fired on initial quiz selection
-		LearnerAssistant.modelInitialize.call(LearnerAssistant, questionModel);
-	});
-	Adapt.on("assessment:quizReset", function(questionModel) {
-		//fired on viewing quiz
-		LearnerAssistant.modelInitialize.call(LearnerAssistant, questionModel);
+	Adapt.on("articleView:postRender", function(view) {
+		if (view.model.get("assessmentModel")) {
+			var questionModel = view.model.get("assessmentModel").getQuestionModel();
+			LearnerAssistant.modelInitialize.call(LearnerAssistant, questionModel);
+		}
 	});
 
 	Adapt.on("assessment:complete", function(questionModel) {
