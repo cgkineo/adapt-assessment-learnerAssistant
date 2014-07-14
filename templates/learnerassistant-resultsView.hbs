@@ -22,10 +22,12 @@
 			<div id="status" class="table-threetooone">
 				<div class="table-threetoone-inner">
 					<div class="col-header"><span class="icon icon-flag"></span><span>Status</span></div>
-					<div class="mobile-only cell"><div class="cell-inner">Global Tick</div></div>
+					<div class="mobile-only cell"><div class="cell-inner">{{#if options._isReviewComplete}}<span class="icon icon-star"></span><span>Reviewed</span>{{else}}<span class="icon icon-star-hollow"></span><span>Flagged for review</span>{{/if}}</div></div>
 					{{#with options}}
 						{{#each selectedQuestions }}
-							<div class="not-mobile cell rowspan-{{_associatedLearning.length}}"><div class="cell-inner rowspan-inherit">Local Tick</div></div>
+							<div class="not-mobile cell rowspan-{{_associatedLearning.length}}"><div class="cell-inner rowspan-inherit">{{#if _isReviewComplete}}<span class="icon icon-star"></span><span>Reviewed</span>{{else}}<span class="icon icon-star-hollow"></span><span>Flagged for review</span>{{/if}}</div></div>
+						{{else}}
+							<div class="not-mobile cell rowspan-0"><div class="cell-inner rowspan-inherit">-</div></div>
 						{{/each}}
 					{{/with}}
 				</div>
@@ -36,6 +38,8 @@
 					{{#with options}}
 						{{#each selectedQuestions }}
 							<div class="cell rowspan-{{_associatedLearning.length}}"><div class="cell-inner rowspan-inherit">{{title}}</div></div>
+						{{else}}
+							<div class="cell rowspan-0"><div class="cell-inner rowspan-inherit">-</div></div>
 						{{/each}}
 					{{/with}}
 				</div>
@@ -47,11 +51,13 @@
 						{{#each selectedQuestions }}
 							<div class="cell rowspan-{{_associatedLearning.length}}">
 							{{#each _associatedLearning}}
-								<div class="cell-inner rowspan-1">{{title}}</div>
+								<div class="cell-inner rowspan-1"><a href="#" data-type="associatedlearning" data-id="{{_id}}">{{title}}</a></div>
 							{{else}}
 								<div class="cell-inner rowspan-1">-</div>
 							{{/each}}
 							</div>
+						{{else}}
+							<div class="cell rowspan-0"><div class="cell-inner rowspan-inherit">-</div></div>
 						{{/each}}
 					{{/with}}
 				</div>

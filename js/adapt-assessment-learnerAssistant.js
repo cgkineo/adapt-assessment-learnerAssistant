@@ -24,7 +24,7 @@ define(function(require) {
 			for (var i = 0; i < LearnerAssistant.model.allQuestions.length; i++) _.extend(LearnerAssistant.model.allQuestions[i], defaults);
 
 			//Update results view
-			this.views['results'].modelUpdate(LearnerAssistant.model);
+			this.views['results'].modelInitialize(LearnerAssistant.model);
 		},
 		modelUpdate: function(questionModel) {
 			//Update questionModel copy
