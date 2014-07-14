@@ -1,0 +1,62 @@
+<div class="learnerassistant-resultsView-inner block-inner">
+	<div class="learnerassistant-banner">
+		<a href="#">
+			<span><h5>Guided Learning</h5></span>
+		</a>
+	</div>
+	<div class="learnerassistant-resultsView-filter-container">
+		<div class="learnerassistant-resultsView-filter clearfix">
+			<a href="#" data-filter="failed">
+				<span>Failed</span>
+			</a>
+			<a href="#" data-filter="passed">
+				<span>Passed</span>
+			</a>
+			<a href="#" data-filter="all">
+				<span>All</span>
+			</a>
+		</div>
+	</div>
+	<div class="content-container">
+		<div class="content">	
+			<div id="status" class="table-threetooone">
+				<div class="table-threetoone-inner">
+					<div class="col-header"><span class="icon icon-flag"></span><span>Status</span></div>
+					<div class="mobile-only cell"><div class="cell-inner">Global Tick</div></div>
+					{{#with options}}
+						{{#each selectedQuestions }}
+							<div class="not-mobile cell rowspan-{{_associatedLearning.length}}"><div class="cell-inner rowspan-inherit">Local Tick</div></div>
+						{{/each}}
+					{{/with}}
+				</div>
+			</div>
+			<div id="question" class="table-threetooone">
+				<div class="table-threetoone-inner">
+					<div class="col-header"><span class="icon icon-question"></span><span>Question</span></div>
+					{{#with options}}
+						{{#each selectedQuestions }}
+							<div class="cell rowspan-{{_associatedLearning.length}}"><div class="cell-inner rowspan-inherit">{{title}}</div></div>
+						{{/each}}
+					{{/with}}
+				</div>
+			</div>
+			<div id="tutorialcontent" class="table-threetooone">
+				<div class="table-threetoone-inner">
+					<div class="col-header"><span class="icon icon-eye"></span><span>Tutorial content</span></div>
+					{{#with options}}
+						{{#each selectedQuestions }}
+							<div class="cell rowspan-{{_associatedLearning.length}}">
+							{{#each _associatedLearning}}
+								<div class="cell-inner rowspan-1">{{title}}</div>
+							{{else}}
+								<div class="cell-inner rowspan-1">-</div>
+							{{/each}}
+							</div>
+						{{/each}}
+					{{/with}}
+				</div>
+			</div>
+		</div>
+	</div>
+	<a href="#" class="learnerassistant-close icon icon-cross"></a>
+</div>
