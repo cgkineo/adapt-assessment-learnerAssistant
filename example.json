@@ -1,26 +1,16 @@
 // To go in the course.json file
-"_courseinfo" : {
-    "_filterButtons":{
-        "all": "All",
-        "articles": "Articles",
-        "blocks": "Blocks"
+
+
+"_banks" : {
+    "1": {
+        "title": "Bank1 - Learning outcome etc."
     },
-    "_allText": {
-        "title": "Title",
-        "status": "Status",
-        "pages": "Pages",
-        "menus": "Menus",
-        "articles": "Articles",
-        "blocks": "Blocks",
-        "components": "Components",
-        "assessment": "Assessment",
-        "total": "Total",
-        "incomplete": "Incomplete",
-        "completed": "Completed",
-        "hasassessment": "Course has assessment",
-        "hasnoassessment": "Course has no assessment",
-        "assessmentincomplete": "Assessment is incomplete",
-        "score" : "Score"
-    },
-    "_defaultFilter": "articles"
+    "2": {
+        "title": "Bank2 - Learning outcome etc."
+    }
+    //bank ids + titles
+},
+"_learnerassistant": {
+    "_showAllBankQuestions": false, //all questions (true) or only failed questions(false)
+    "_showAssociatedLearningBy": "bank" // bank or id
 }
