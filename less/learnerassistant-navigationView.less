@@ -1,0 +1,103 @@
+.learnerassistant-navigationView {
+    position:relative;
+    #learnerassistant-toggle {
+
+        .icon {
+            padding: 13px;
+            float: left;
+            
+            cursor: pointer;
+        }
+        &.closed {
+            span.closed {
+                display: inline-block;
+            }
+            span.open {
+                display: none;
+            }
+        }
+        &.open {
+            span.closed {
+                display: none;
+            }
+            span.open {
+                display: inline-block;
+            }
+        }
+    }
+     @media all and (min-width:@device-width-medium) {
+        #learnerassistant-banks {
+            float: left;
+            .icon {
+                padding: 13px;
+                color: @item-color;
+            }
+            .bank {
+                height: 100%;
+                display: inline-block;
+                &.complete {
+                    span.complete {
+                        display: inline-block;
+                        color: yellow;
+                    }
+                    span.incomplete {
+                        display: none;
+                    }
+                }
+                &.incomplete {
+                    span.complete {
+                        display: none;
+                    }
+                    span.incomplete {
+                        display: inline-block;
+                        color: red;
+                    }
+                }
+            }
+        }
+    }
+    @media all and (max-width:(@device-width-medium - 1px)) {
+        #learnerassistant-banks {
+            display: none;
+        }
+    }
+
+    .buttongroup {
+        margin-top: 3px;
+        margin-right: 3px;
+        float: right;
+        &.not-reviewed.is-resultsshown {
+            #learnerassistant-revision {
+                display: block;
+            }
+            #learnerassistant-next {
+                display: none;
+            }
+            #learnerassistant-takequiz {
+                display: none;
+            }
+        }
+        &.not-reviewed.not-resultsshown {
+            #learnerassistant-revision {
+                display: none;
+            }
+            #learnerassistant-next {
+                display: block;
+            }
+            #learnerassistant-takequiz {
+                display: none;
+            }
+        }
+        &.is-reviewed {
+            #learnerassistant-revision {
+                display: none;
+            }
+            #learnerassistant-next {
+                display: none;
+            }
+            #learnerassistant-takequiz {
+                display: none;
+            }
+        }
+    }
+}

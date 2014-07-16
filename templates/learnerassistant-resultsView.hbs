@@ -5,7 +5,7 @@
 		</a>
 	</div>
 	<div class="learnerassistant-resultsView-filter-container">
-		<div class="learnerassistant-resultsView-filter clearfix">
+		<!--<div class="learnerassistant-resultsView-filter clearfix">
 			<a href="#" data-filter="failed">
 				<span>Failed</span>
 			</a>
@@ -15,7 +15,7 @@
 			<a href="#" data-filter="all">
 				<span>All</span>
 			</a>
-		</div>
+		</div>-->
 	</div>
 	<div class="content-container">
 		<div class="content">	
@@ -24,8 +24,8 @@
 					<div class="col-header"><span class="icon icon-flag"></span><span>Status</span></div>
 					<div class="mobile-only cell"><div class="cell-inner">{{#if options._isReviewComplete}}<span class="icon icon-star"></span><span>Reviewed</span>{{else}}<span class="icon icon-star-hollow"></span><span>Flagged for review</span>{{/if}}</div></div>
 					{{#with options}}
-						{{#each selectedQuestions }}
-							<div class="not-mobile cell rowspan-{{_associatedLearning.length}}"><div class="cell-inner rowspan-inherit">{{#if _isReviewComplete}}<span class="icon icon-star"></span><span>Reviewed</span>{{else}}<span class="icon icon-star-hollow"></span><span>Flagged for review</span>{{/if}}</div></div>
+						{{#each banks }}
+							<div class="not-mobile cell rowspan-0"><div class="cell-inner rowspan-inherit">{{#if _isReviewComplete}}<span class="icon icon-star"></span><span>Reviewed</span>{{else}}<span class="icon icon-star-hollow"></span><span>Flagged for review</span>{{/if}}</div></div>
 						{{else}}
 							<div class="not-mobile cell rowspan-0"><div class="cell-inner rowspan-inherit">-</div></div>
 						{{/each}}
@@ -34,10 +34,10 @@
 			</div>
 			<div id="question" class="table-threetooone">
 				<div class="table-threetoone-inner">
-					<div class="col-header"><span class="icon icon-question"></span><span>Question</span></div>
+					<div class="col-header"><span class="icon icon-question"></span><span>Bank</span></div>
 					{{#with options}}
-						{{#each selectedQuestions }}
-							<div class="cell rowspan-{{_associatedLearning.length}}"><div class="cell-inner rowspan-inherit">{{title}}</div></div>
+						{{#each banks }}
+							<div class="cell rowspan-0"><div class="cell-inner rowspan-inherit">{{title}}</div></div>
 						{{else}}
 							<div class="cell rowspan-0"><div class="cell-inner rowspan-inherit">-</div></div>
 						{{/each}}
@@ -48,14 +48,8 @@
 				<div class="table-threetoone-inner">
 					<div class="col-header"><span class="icon icon-eye"></span><span>Tutorial content</span></div>
 					{{#with options}}
-						{{#each selectedQuestions }}
-							<div class="cell rowspan-{{_associatedLearning.length}}">
-							{{#each _associatedLearning}}
-								<div class="cell-inner rowspan-1"><a href="#" data-type="associatedlearning" data-id="{{_id}}">{{title}}</a></div>
-							{{else}}
-								<div class="cell-inner rowspan-1">-</div>
-							{{/each}}
-							</div>
+						{{#each banks }}
+							<div class="cell rowspan-0"><div class="cell-inner rowspan-inherit">{{_countUnreviewedAssociatedLearning}} left or alternatively you're at {{_countReviewedAssociatedLearning}}/{{_countTotalAssociatedLearning}}</div></div>
 						{{else}}
 							<div class="cell rowspan-0"><div class="cell-inner rowspan-inherit">-</div></div>
 						{{/each}}
