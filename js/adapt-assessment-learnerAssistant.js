@@ -169,7 +169,7 @@ define(function(require) {
 			LearnerAssistant.views['assessment'] = view;
 
 			var questionModel = view.model.get("assessmentModel").getQuestionModel();
-			if (!LearnerAssistant.model.get("isComplete")) {//} || view.model.get('_assessment')._isResetOnRevisit) { //TODO: REVISIT BROKEN, PLP DOESN'T SHOW CORRECT OR QUIZ NOT RESET?
+			if (!LearnerAssistant.model.get("isComplete") || view.model.get('_assessment')._isResetOnRevisit) {
 				//SETUP MODEL FROM ASSESSMENT
 				LearnerAssistant.modelSetup.call(LearnerAssistant, questionModel);
 
@@ -192,6 +192,7 @@ define(function(require) {
 	Adapt.on("assessment:complete", function(questionModel) {
 		//fired on assessment complete
 		LearnerAssistant.model.set("isComplete", true);
+		Adapt.trigger('navigation:backButton');
 
 		//HIDE PAGELEVELPROGRESS NAV
 		LearnerAssistant.pagelevelprogress.hide(0);
@@ -213,14 +214,38 @@ define(function(require) {
 
 	});
 
-	Adapt.on("learnerassistant:recalculated", function() {
+	Adapt.on("learnerassistant:interactionComplete", function() {
 		//REDRAW LEARNINGASSISTANT NAVIGATION
+		LearnerAssistant.model.set("isInteractionsComplete", true);
 		LearnerAssistant.views['navigation'].reRender();
 	});
 
 	Adapt.on("learnerassistant:complete", function() {
 		//REDRAW LEARNINGASSISTANT NAVIGATION
-		alert("complete");
+		var alertObject = {
+		    title: "Congratulations",
+		    body: "You have completed your review. Please take the quiz again!",
+		    confirmText: "Take Quiz",
+		    _callbackEvent: "learnerassistant:takeQuiz",
+		    _showIcon: false
+		};
+
+		Adapt.trigger('notify:alert', alertObject);
+	});
+
+	Adapt.on("learnerassistant:takeQuiz", function() {
+		var id = LearnerAssistant.views['assessment'].model.get("_id");
+		var element = Adapt.findById(id)
+		var typeNameConversion = {
+			"component": "components",
+			"article": "articles",
+			"block": "blocks",
+			"menu": "contentObject",
+			"page": "contentObject"
+		};
+		
+		
+		Adapt.navigateToElement(id, typeNameConversion[element.get("_type")] );
 	});
 
 

@@ -23,6 +23,7 @@ define(function(require) {
 				Adapt.on("learnerassistant:resultsclosed", function() {
 					NavigationViewHandle.$el.find("#learnerassistant-toggle").removeClass("open").addClass("closed");
 				});
+				this.model.set("isInteractionsComplete", false);
 			}
 		},
 		{
@@ -56,9 +57,9 @@ define(function(require) {
 				
 				Adapt.navigateToElement(assoc._id, typeNameConversion[element.get("_type")] );
 				this.parent.results.hide();
+				this.render();
 			}
 		}
-
 	);
 	return LearnerassistantNavigationView;
 })

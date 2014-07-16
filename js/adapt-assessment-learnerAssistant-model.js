@@ -102,44 +102,7 @@ define(function(require) {
 				this.set("countBanksForReview", failedBanks.length);
 				this.set("isReviewNeeded", (options.countBanksForReview > 0));
 
-				var assocLearn = null;
-				//TODO: NEED TO REDO SORTS SO THAT ANY CHILD OBJECTS ARE REMOVED AS UNECESSARY
-				switch (settings._showAssociatedLearningBy) {
-				case "id":
-					assocLearn = _.values(options.associatedLearning).sort(function(a, to) {
-						//SORTED BY ELEMENT GRAVITY (PAGE, ARTICLE, BLOCK, COMPONENT) THEN BY ID A-Z
-						var typea = orderBy.indexOf(a._id.substr(0, a._id.indexOf("-")));
-						var typeto = orderBy.indexOf(to._id.substr(0, to._id.indexOf("-")));
-
-						if (typea < typeto) return -1;
-						if (typea > typeto) return 1;
-
-						if (a._id < to._id) return -1;
-						if (a._id > to._id) return 1;
-						return 0;
-					});
-					break;
-				case "bank":
-				default:
-					assocLearn = _.values(options.associatedLearning).sort(function(a, to) {
-						//SORTED BY QUIZBANK 0-9, ELEMENT GRAVITY (PAGE, ARTICLE, BLOCK, COMPONENT) THEN BY ID A-Z
-						if (a._quizBankID < to._quizBankID) return -1;
-						if (a._quizBankID > to._quizBankID) return 1;
-
-						var typea = orderBy.indexOf(a._id.substr(0, a._id.indexOf("-")));
-						var typeto = orderBy.indexOf(to._id.substr(0, to._id.indexOf("-")));
-
-						if (typea < typeto) return -1;
-						if (typea > typeto) return 1;
-
-						if (a._id < to._id) return -1;
-						if (a._id > to._id) return 1;
-						return 0;
-					});
-					break;
-				}
-				this.set("associatedLearning", assocLearn);
-
+				this.sortAssociatedLearnings();
 				this.calcReviewed();
 			},
 			//INTERACTION EVENTS FOR ASSOCIATED LEARNING
@@ -182,6 +145,52 @@ define(function(require) {
 				options.associatedLearning[model.get('_id')]._interactions++;
 				this.flagBugInteractionsCompletePropagation();
 				this.calcReviewed();
+				Adapt.trigger("learnerassistant:interactionComplete", model);
+				if (options._isReviewComplete) {
+					Adapt.trigger("learnerassistant:complete");
+				}
+			},
+			sortAssociatedLearnings: function() {
+				var settings = this.get("settings");
+				var options = this.get('options');
+				//SETUP ORDER OF ASSOCIATED LEARNINGS
+				var assocLearn = null;
+				//TODO: NEED TO REDO SORTS SO THAT ANY CHILD OBJECTS ARE REMOVED AS UNECESSARY
+				switch (settings._showAssociatedLearningBy) {
+				case "id":
+					assocLearn = _.values(options.associatedLearning).sort(function(a, to) {
+						//SORTED BY ELEMENT GRAVITY (PAGE, ARTICLE, BLOCK, COMPONENT) THEN BY ID A-Z
+						var typea = orderBy.indexOf(a._id.substr(0, a._id.indexOf("-")));
+						var typeto = orderBy.indexOf(to._id.substr(0, to._id.indexOf("-")));
+
+						if (typea < typeto) return -1;
+						if (typea > typeto) return 1;
+
+						if (a._id < to._id) return -1;
+						if (a._id > to._id) return 1;
+						return 0;
+					});
+					break;
+				case "bank":
+				default:
+					assocLearn = _.values(options.associatedLearning).sort(function(a, to) {
+						//SORTED BY QUIZBANK 0-9, ELEMENT GRAVITY (PAGE, ARTICLE, BLOCK, COMPONENT) THEN BY ID A-Z
+						if (a._quizBankID < to._quizBankID) return -1;
+						if (a._quizBankID > to._quizBankID) return 1;
+
+						var typea = orderBy.indexOf(a._id.substr(0, a._id.indexOf("-")));
+						var typeto = orderBy.indexOf(to._id.substr(0, to._id.indexOf("-")));
+
+						if (typea < typeto) return -1;
+						if (typea > typeto) return 1;
+
+						if (a._id < to._id) return -1;
+						if (a._id > to._id) return 1;
+						return 0;
+					});
+					break;
+				}
+				this.set("associatedLearning", assocLearn);
 			},
 			calcReviewed: function() {
 				var resultsViewHandle = this;
@@ -196,20 +205,19 @@ define(function(require) {
 					}
 				});
 				_.each(options.banks, function(bank) {
-					bank._isReviewComplete = true;
+					//bank._isReviewComplete = true;
 					var associatedLearning = [].concat.apply([], _.pluck(bank.questions, "_associatedLearning"));
 					bank._countTotalAssociatedLearning = associatedLearning.length;
 					bank._countReviewedAssociatedLearning = _.filter(associatedLearning, function(item) { return item._interactions > 0 } ).length;
 					bank._countUnreviewedAssociatedLearning = _.filter(associatedLearning, function(item) { return item._interactions == 0 } ).length;
 					var notReviewedQuestions = _.findWhere(bank.questions, { _isReviewComplete: false });
 					if(notReviewedQuestions) {
-							bank._isReviewComplete = false;
+						bank._isReviewComplete = false;
+					} else {
+						bank._isReviewComplete = true;
 					}
 				});
-				Adapt.trigger("learnerassistant:recalculated");
-				if (options._isReviewComplete) {
-					Adapt.trigger("learnerassistant:complete");
-				}
+
 			},
 			flagBugInteractionsCompletePropagation: function() {
 				var resultsViewHandle = this;
