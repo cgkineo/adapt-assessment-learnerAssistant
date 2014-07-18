@@ -1,29 +1,58 @@
 // To go in the course.json file
 
-
 "_banks" : {
     "1": {
         "title": "Bank1 - Learning outcome etc."
     },
     "2": {
         "title": "Bank2 - Learning outcome etc."
+    },
+    "3": {
+        "title": "Bank3 - Learning outcome etc."
+    },
+    "4": {
+        "title": "Bank4 - Learning outcome etc."
+    },
+    "5": {
+        "title": "Bank5 - Learning outcome etc."
     }
-    //bank ids + titles
 },
+
 "_learnerassistant": {
-    "_showAllBankQuestions": false, //all questions (true) or only failed questions(false)
-    "_showAssociatedLearningBy": "bank" // bank or id
-}
-
---- From Original PageLevelProgress ---
-
-// To go on a component
-{
-    "_pageLevelProgress": {
-        "_isEnabled": true,
-        "_useAssessment": true
+        "_showAllBankQuestions": false, //all questions (true) or only failed questions(false)
+        "_start" : {
+            "title": "Welcome to Guided Learning",
+            "body": "Description of what you need to acheive"
+        },
+        "_end" : {
+            "title": "Congratulations",
+            "body": "You have completed your review. Please retake the quiz!",
+            "button": "Take Quiz"
+        },
+        "_buttons": {
+            "_next": "Next",
+            "_start": "Begin Revision" 
+        },
+        "_results": {
+            "_status": "Status",
+            "_bank": "Learning outcomes",
+            "_associateLearnings": "Sections to complete",
+            "_toReview": "Flagged for review",
+            "_reviewed": "Completed"
+        },
+         "_assessmentPageLevelProgress": {
+            "_incrementalMarking": false,
+            "_showInvisible": true,
+            "_showProgress": true
+        }
     }
+
+
+//to go on each component not showing in learnerassistantprogress
+"_learningassistentProgress": {
+    "_isEnabled":false
 }
+
 
 // the article assesment object in articles.json
 "_assessment": {
@@ -31,4 +60,15 @@
         "_incrementalMarking": true,
         "_showMarking": true,
         "_showProgress": true
-    },
+    }
+}
+
+--- From Original PageLevelProgress ---
+
+// To go on a component
+{
+    "_pageLevelProgress": {
+        "_isEnabled": false,
+        "_useAssessment": true
+    }
+}
