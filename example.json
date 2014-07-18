@@ -20,6 +20,11 @@
 
 "_learnerassistant": {
         "_showAllBankQuestions": false, //all questions (true) or only failed questions(false)
+         "_before" : {
+            "title": "Almost there!",
+            "body": "You have some material you need to brush up on!",
+            "button": "Look at revision"
+        },
         "_start" : {
             "title": "Welcome to Guided Learning",
             "body": "Description of what you need to acheive"
