@@ -1,0 +1,14 @@
+<div class="la-assess-prog-inner {{#if hideUserAnswer}}hide-useranswer{{else}}show-useranswer{{/if}} {{#if isComplete}}complete{{else}}incomplete{{/if}} {{#if incrementalMarking}}incrementalMarking{{else}}not-incrementalMarking{{/if}} {{#if showProgress}}show-progress{{else}}hide-progress{{/if}}">
+	<a href="#" class="la-tutor-button icon-feedback icon clickstyle"></a>
+	{{#if showInvisible}}
+	    {{#each components}}
+	            <a class="la-assess-prog-item {{assessmentPageLevelProgressMark}} {{#if _isComplete}}complete{{else}}incomplete{{/if}}" href="#" data-la-assess-prog-id="{{_id}}"><span class="answered icon icon-radio-checked"></span><span class="unanswered icon icon-radio-unchecked"></span><span class="incorrect icon icon-cross"></span><span class="correct icon icon-tick"></span></a>
+	    {{/each}}
+	{{else}}
+		{{#each components}}
+	        {{#if _isVisible}}
+	            <a class="la-assess-prog-item {{assessmentPageLevelProgressMark}} {{#if _isComplete}}complete{{else}}incomplete{{/if}}" href="#" data-la-assess-prog-id="{{_id}}">{{else}} <span>{{/if}}<span class="answered icon icon-radio-checked"></span><span class="unanswered icon icon-radio-unchecked"></span><span class="incorrect icon icon-cross"></span><span class="correct icon icon-tick"></span>{{#if _isVisible}}</a>{{else}}</span>
+	        {{/if}}
+	    {{/each}}
+	{{/if}}
+</div>

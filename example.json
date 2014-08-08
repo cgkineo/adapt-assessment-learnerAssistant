@@ -15,6 +15,13 @@
     "_showAssociatedLearningBy": "bank" // bank or id
 }
 
+
+
+//to go on each component not showing in learnerassistantprogress
+"_learningassistentProgress": {
+    "_isEnabled":false
+}
+
 --- From Original PageLevelProgress ---
 
 // To go on a component
