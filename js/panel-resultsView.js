@@ -9,15 +9,11 @@ define(function(require) {
 	var Adapt = require('coreJS/adapt');
 	var Backbone = require('backbone');
 
-	var LearnerassistantResultsView = Backbone.View.extend(
+	var panel = Backbone.View.extend(
 		{
 			//UI
 			className : "la-results",
 			template : "panel-results",
-			render: function() {
-				var template = Handlebars.templates[this.template];
-				this.$el.html(template(this.model.toJSON()));
-			},
 
 			initialize: function() {
 				var thisHandle = this;
@@ -26,18 +22,28 @@ define(function(require) {
 				});
 			},
 
-			//INTERACTION
+			//DRAWING
+			render: function() {
+				var template = Handlebars.templates[this.template];
+				this.$el.html(template(this.model.toJSON()));
+			},
+
+			//EVENTS
 			events : {
 				'click .la-close': 'onCloseClick'
 			},
+
 			onCloseClick: function(event) {
 				event.preventDefault();
+
 				Adapt.learnerassistant.panel.results.hide();
+
 			}
+
 		}
 	);
 
 
 
-	return LearnerassistantResultsView;
+	return panel;
 });

@@ -9,7 +9,7 @@ define(function(require) {
 	var Adapt = require('coreJS/adapt');
 	var Backbone = require('backbone');
 
-	var LearnerassistantCertificateView = Backbone.View.extend(
+	var panel = Backbone.View.extend(
 		{
 			//VARIABLES
 			certificate: {
@@ -29,27 +29,38 @@ define(function(require) {
 			className : "la-certificate",
 			template : "panel-certificate",
 			internalOn: false,
+
 			initialize: function() {
 				var thisHandle = this;
 				Adapt.on("learnerassistant:initialized", function() {
 					thisHandle.model = Adapt.learnerassistant.model;
 				});
 			},
+
+			
 			preRender: function() {
-				if (Adapt.learnerassistant.model.get('settings')._certificateTitle.length > 0) {
-					Adapt.learnerassistant.model.get('settings')._certificateTitleText = this.getCourseTitle() + " - " + Adapt.learnerassistant.model.get('settings')._certificateTitle
+
+				var _learnerassistant = Adapt.learnerassistant.model.get('_learnerassistant');
+				var _state = Adapt.learnerassistant.model.get('_state');
+
+				if (_learnerassistant._certificateTitle.length > 0) {
+					_learnerassistant._certificateTitleText = this.getCourseTitle() + " - " + _learnerassistant._certificateTitle
 				} else {
-					Adapt.learnerassistant.model.get('settings')._certificateTitleText = this.getCourseTitle() + Adapt.learnerassistant.model.get('settings')._certificateTitle
+					_learnerassistant._certificateTitleText = this.getCourseTitle() + _learnerassistant._certificateTitle
 				}
-				Adapt.learnerassistant.views['menu-topnavigation'].render();
+
+				_state._views['menu-topnavigation'].render();
+
 			},
 			render: function() {
+
 				this.preRender();
 				var template = Handlebars.templates[this.template];
 				this.$el.html(template(this.model.toJSON()));
 				_.defer(_.bind(function() {
 					this.postRender();
 				}, this));
+
 			},
 			postRender: function() {
 				this.onCertificateWindowLoaded();
@@ -59,10 +70,12 @@ define(function(require) {
 			events : {
 				'click .la-close': 'onCloseClick'
 			},
+
 			onCloseClick: function(event) {
 				event.preventDefault();
 				Adapt.learnerassistant.panel.certificate.hide();
 			},
+
 			onCertificateWindowLoaded: function() {
 				if (!this.certificate.onDrawPrint) this.certificate.window = window;
 				this.certificate.drawn = false;
@@ -79,6 +92,7 @@ define(function(require) {
 
 				this.drawCertificate();
 			},
+
 			onCertificateDrawn: function(image, event){
 				console.log("onCertificateDrawn");
 				this.certificate.drawn = true;
@@ -119,6 +133,7 @@ define(function(require) {
 
 				return canvas;
 	      	},
+
 	      	getDate: function() {
 				var dateString = "";
 				var date = new Date();
@@ -134,11 +149,13 @@ define(function(require) {
 
 				return dateString;
 			},
+
 			getUsername: function() {
 				var username = require("extensions/adapt-contrib-spoor/js/scormWrapper").instance.getStudentName();
 				if(!username) username = "Unknown learner";
 				return username;
 			},
+
 			getCourseTitle: function() {
 				return Adapt.course.get("title");
 			},
@@ -194,6 +211,7 @@ define(function(require) {
 				
 				
 			},
+
 			drawCertificate: function() {
 				// TODO: need to grab CSS/other external style
 				var isIE = $("html").hasClass("ie");
@@ -206,6 +224,7 @@ define(function(require) {
 				}, this));
 
 			},
+			
 			imageLoaded: function() {
 				this.certificate.imageLoaded = true;
 
@@ -218,14 +237,19 @@ define(function(require) {
 
 
 				// text
-				var settings = this.model.get("settings");
+				var _learnerassistant = this.model.get("_learnerassistant");
+				var _certificateGraphics = _learnerassistant._certificateGraphics;
+				var _titleText = _certificateGraphics._titleText;
+				var _userText = _certificateGraphics._userText;
+				var _dateText = _certificateGraphics._dateText;
 
-				this.certificate.context.font = settings._certificateGraphics._textFont;
-				this.certificate.context.fillStyle = settings._certificateGraphics._textColor;
+				this.certificate.context.font = _certificateGraphics._textFont;
+				this.certificate.context.fillStyle = _certificateGraphics._textColor;
 				this.certificate.context.textAlign = "center";
-				this.certificate.context.fillText(this.getCourseTitle(), settings._certificateGraphics._titleText._left, settings._certificateGraphics._titleText._top,  settings._certificateGraphics._titleText._maxwidth);
-				this.certificate.context.fillText(this.getUsername(), settings._certificateGraphics._userText._left, settings._certificateGraphics._userText._top,  settings._certificateGraphics._userText._maxwidth);
-				this.certificate.context.fillText(this.getDate(), settings._certificateGraphics._dateText._left, settings._certificateGraphics._dateText._top,  settings._certificateGraphics._dateText._maxwidth);
+
+				this.certificate.context.fillText( this.getCourseTitle(), _titleText._left, _titleText._top,  _titleText._maxwidth);
+				this.certificate.context.fillText( this.getUsername(), _userText._left, _userText._top,  _userText._maxwidth);
+				this.certificate.context.fillText( this.getDate(), _dateText._left, _dateText._top,  _dateText._maxwidth);
 				
 				// create composite image	
 				var dataUrl = this.certificate.canvas.toDataURL();
@@ -244,5 +268,5 @@ define(function(require) {
 
 
 
-	return LearnerassistantCertificateView;
+	return panel;
 });

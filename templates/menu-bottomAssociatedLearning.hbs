@@ -1,26 +1,26 @@
 <div class="la-bottom-assoc-learn-inner block-inner">
 	<a href="#" class="la-tutor-button icon-feedback icon clickstyle" data-clickstyle-group="tutor-icons"></a>
-	<div class="buttongroup {{#if isInReview}}is-inreview{{else}}not-inreview{{/if}} {{#if isResultsShown}}is-resultsshown{{else}}not-resultsshown{{/if}} {{#if options._isReviewComplete}}is-reviewed{{else}}not-reviewed{{/if}} {{#if isCertificateShown}}is-certificateshown{{else}}not-certificateshown{{/if}}">
-		{{#if isCertificateShown}}
+	<div class="buttongroup {{#if _state._isInReview}}is-inreview{{else}}not-inreview{{/if}} {{#if _state._isPanelResultsShown}}is-resultsshown{{else}}not-resultsshown{{/if}} {{#if _state._isReviewComplete}}is-reviewed{{else}}not-reviewed{{/if}} {{#if _state._isPanelCertificateShown}}is-certificateshown{{else}}not-certificateshown{{/if}}">
+		{{#if _state._isPanelCertificateShown}}
 
 
-		<button id="la-print" class="buttons-action" tabindex="0"><span class="mobile-only icon icon-printer"></span><span class="not-mobile">{{settings._certificateButtons._print}}</span></button>
-		<button id="la-end" class="buttons-action not-mobile" tabindex="0"><span class="mobile-only icon icon-cross"></span><span class="not-mobile">{{settings._certificateButtons._end}}</span></button>
+		<button id="la-print" class="buttons-action" tabindex="0"><span class="mobile-only icon icon-printer"></span><span class="not-mobile">{{_learnerassistant._certificateButtons._print}}</span></button>
+		<button id="la-end" class="buttons-action not-mobile" tabindex="0"><span class="mobile-only icon icon-cross"></span><span class="not-mobile">{{_learnerassistant._certificateButtons._end}}</span></button>
 
 		{{else}}
 
-		<button id="la-finish" class="buttons-action" {{#unless isInteractionsComplete}}disabled{{/unless}} tabindex="0"><span class="mobile-only icon icon-tick"></span><span class="not-mobile">{{settings._guidedLearningButtons._finish}}</span></button>
-		<button id="la-revision" class="buttons-action" tabindex="0"><span class="mobile-only icon icon-triangle-right"></span><span class="not-mobile">{{settings._guidedLearningButtons._start}}</span></button>
-		<button id="la-continue" class="buttons-action" tabindex="0"><span class="mobile-only icon icon-triangle-right"></span><span class="not-mobile">{{settings._guidedLearningButtons._continue}}</span></button>
-		<button id="la-end" class="buttons-action not-mobile" tabindex="0"><span class="mobile-only icon icon-cross"></span><span class="not-mobile">{{settings._guidedLearningButtons._end}}</span></button>
-		<button id="la-next" class="buttons-action" {{#unless isInteractionsComplete}}disabled{{/unless}} tabindex="0"><span class="mobile-only icon icon-triangle-right"></span><span class="not-mobile">{{settings._guidedLearningButtons._next}}</span></button>
+		<button id="la-finish" class="buttons-action" {{#unless _state._isReviewInteractionComplete}}disabled{{/unless}} tabindex="0"><span class="mobile-only icon icon-tick"></span><span class="not-mobile">{{_learnerassistant._guidedLearningButtons._finish}}</span></button>
+		<button id="la-revision" class="buttons-action" tabindex="0"><span class="mobile-only icon icon-triangle-right"></span><span class="not-mobile">{{_learnerassistant._guidedLearningButtons._start}}</span></button>
+		<button id="la-continue" class="buttons-action" tabindex="0"><span class="mobile-only icon icon-triangle-right"></span><span class="not-mobile">{{_learnerassistant._guidedLearningButtons._continue}}</span></button>
+		<button id="la-end" class="buttons-action not-mobile" tabindex="0"><span class="mobile-only icon icon-cross"></span><span class="not-mobile">{{_learnerassistant._guidedLearningButtons._end}}</span></button>
+		<button id="la-next" class="buttons-action" {{#unless _state._isReviewInteractionComplete}}disabled{{/unless}} tabindex="0"><span class="mobile-only icon icon-triangle-right"></span><span class="not-mobile">{{_learnerassistant._guidedLearningButtons._next}}</span></button>
 
 		{{/if}}
 	</div>
 
-	<div class="la-navigation-completion-container {{#if isCertificateShown}}is-certificateshown{{else}}not-certificateshown{{/if}}">
+	<div class="la-navigation-completion-container {{#if _state._isPanelCertificateShown}}is-certificateshown{{else}}not-certificateshown{{/if}}">
 		<div class="la-navigation-completion" role="progressbar">
-			<div class="la-navigation-bar" style="width:{{options._percentageReviewedAssociateLearning}}%">
+			<div class="la-navigation-bar" style="width:{{_state._percentageReviewedAssociateLearning}}%">
 			</div>
 		</div>
 	</div>

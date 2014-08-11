@@ -1,9 +1,48 @@
 //PAGE LEVEL PROGRESS AWARE
-html.guided-learning-mode {
+	html.guided-learning-mode {
 
-	//HIDE PLP IN GUIDED LEARNING MODE
-	.page-level-progress-navigation {
-		display:none;
+		//HIDE PLP IN GUIDED LEARNING MODE
+		.page-level-progress-navigation {
+			display:none;
+		}
+		
 	}
-	
-}
+
+//MENU INTRO SCREEN AWARE
+	html.guided-learning-mode {
+		.menu-intro-screen {
+			display: none !important;
+		}
+	}
+
+
+//ASSESSMENT AWARE
+	//on _assessment._canShowFeedback == false, hide-feedback = hide-marking
+	.buttons.hide-feedback {
+		.buttons-cluster {
+			.buttons-marking-icon {
+				display: none !important;
+			}
+		}
+	}
+
+	//on submitted and hide-feedback, hide buttons
+	.submitted {
+		//MCQ
+		+.buttons.hide-feedback {
+			.buttons-cluster {
+				.buttons-action {
+					display: none !important;
+				}
+			}
+		}
+
+		//GMCQ
+		.buttons.hide-feedback {
+			.buttons-cluster {
+				.buttons-action {
+					display: none !important;
+				}
+			}
+		}
+	}

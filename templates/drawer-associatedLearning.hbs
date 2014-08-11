@@ -1,6 +1,6 @@
-<div class="la-drawer-title"><h5>{{{settings._drawerTitle}}}</h5></div>
+<div class="la-drawer-title"><h5>{{{_learnerassistant._drawerTitle}}}</h5></div>
 <div class="la-drawer-inner" role="progressbar">
-    {{#each associatedLearning}}
+    {{#each _associatedlearning._path}}
     <div class="la-drawer-item drawer-item">
         <a class="la-drawer-item-title clearfix drawer-item-open" href="#" data-la-drawer-id="{{_id}}">
     	<h5 class="la-drawer-item-title-inner" aria-label="{{{title}}}">
@@ -9,8 +9,6 @@
         <div class="la-drawer-indicator la-drawer-indicator-{{#if _isInteractionsComplete}}complete{{else}}incomplete{{/if}}">
             <span class="icon icon-book complete"></span>
             <span class="icon icon-flag incomplete"></span>
-            <!--<div class="la-drawer-indicator-bar">
-            </div>-->
         </div>
         </a>
     </div>

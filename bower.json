@@ -5,7 +5,7 @@
     "Oliver Foster <oliver.foster@kineo.com"
   ],
   "description": "%description",
-  "main": "/js/adapt-assessment-learnerAssistant.js",
+  "main": "/js/adapt-assessment-learnerAssistant-controller.js",
   "keywords": [
     "adapt-plugin",
     "adapt-extension"
