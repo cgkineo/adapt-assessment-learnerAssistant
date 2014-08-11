@@ -22,27 +22,31 @@ define(function(require) {
 
 				var _state = Adapt.learnerassistant.model.get("_state");
 				var _learnerassistant = Adapt.learnerassistant.model.get('_learnerassistant');
+				var _banks = Adapt.learnerassistant.model.get("_banks");
+				var _associatedlearning = Adapt.learnerassistant.model.get('_associatedlearning');
 
 				var assessmentView = _state._views['assessment'];
 				var assessmentViewComponents = assessmentView.model.findDescendants('components');
 
-				var c = new Backbone.Collection( assessmentViewComponents.filter(function(item) {
-		    		return item.get('_isAvailable') && item.get('_pageLevelProgress') && item.get('_pageLevelProgress')._useAssessment;
-		    	}) );
-
-		    	if (c.length === 0) return;
+		    	if (assessmentViewComponents.length === 0) return;
 		    	
-		    	//FILTER ITEMS THAT HAVE BEEN SPECIFICALLY TURNED ON/OFF
-		    	var data = c.toJSON();
-				data = _.filter(data, function(item) { 
-					if (typeof item._learningassistentProgress == "undefined") return true;
-					if (typeof item._learningassistentProgress._isEnabled == "undefined") return true;
-					return item._learningassistentProgress._isEnabled;
+		    	//FILTER ITEMS THAT HAVE BEEN SPECIFICALLY TURNED ON/OFF OR ARE UNAVAILBLE
+		    	var data = assessmentViewComponents.toJSON();
+				data = _.filter(data, function(component) { 
+					if (!component._isAvailable) return false;
+					//CHECK IF USING PLP
+					if (component._pageLevelProgress === undefined ||  component._pageLevelProgress._useAssessment === undefined || component._pageLevelProgress._useAssessment === false) return false;
+					//CHECK IF DISABLED
+					if (typeof component._learningassistentProgress == "undefined") return true;
+					if (typeof component._learningassistentProgress._isEnabled == "undefined") return true;
+					return component._learningassistentProgress._isEnabled;
 				});
 
 				this.model = {
 					_state: _state,
 					_learnerassistant: _learnerassistant,
+					_banks: _banks,
+					_associatedlearning: _associatedlearning,
 		        	_questions: data
 		        };
 

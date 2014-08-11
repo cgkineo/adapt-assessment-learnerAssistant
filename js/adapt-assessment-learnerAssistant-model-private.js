@@ -148,17 +148,15 @@ define(function(require) {
 						var model = Adapt.findById(component._id );
 						var descendents = model.findDescendants("components");
 						
-						if (descendents.filter(function(component) { 
+						if (descendents.filter(function(item) { 
 
 								//CHECK IF AVAILABLE
-								if (typeof component.get("_isAvailable") === false) return false; 
-								
-								//CHECK IF NOT DISABLED
-								if (typeof component.get("_learningassistentProgress ") != "undefined" && component.get("_learningassistentProgress ")._isEnabled === false) return;
+								if (typeof item.get("_isAvailable") === false) return false; 
 
-								//CHECK IF PLP DEFINED NAD ENABLED
-								if (typeof component.get("_pageLevelProgress") == "undefined") return false;
-								return component.get("_pageLevelProgress")._isEnabled; 
+								//CHECK IF NOT DISABLED
+								if (typeof item.get("_learningassistentProgress ") != "undefined" && item.get("_learningassistentProgress ")._isEnabled === false) return false;
+
+								return true;
 
 							} ).length === 0) return false; //SKIP IF NO COMPATIBLE DESCENDANTS FOUND
 

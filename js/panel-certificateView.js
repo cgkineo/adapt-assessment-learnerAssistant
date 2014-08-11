@@ -37,24 +37,8 @@ define(function(require) {
 				});
 			},
 
-			
-			preRender: function() {
-
-				var _learnerassistant = Adapt.learnerassistant.model.get('_learnerassistant');
-				var _state = Adapt.learnerassistant.model.get('_state');
-
-				if (_learnerassistant._certificateTitle.length > 0) {
-					_learnerassistant._certificateTitleText = this.getCourseTitle() + " - " + _learnerassistant._certificateTitle
-				} else {
-					_learnerassistant._certificateTitleText = this.getCourseTitle() + _learnerassistant._certificateTitle
-				}
-
-				_state._views['menu-topnavigation'].render();
-
-			},
 			render: function() {
 
-				this.preRender();
 				var template = Handlebars.templates[this.template];
 				this.$el.html(template(this.model.toJSON()));
 				_.defer(_.bind(function() {
@@ -73,7 +57,9 @@ define(function(require) {
 
 			onCloseClick: function(event) {
 				event.preventDefault();
-				Adapt.learnerassistant.panel.certificate.hide();
+
+				Adapt.trigger("learnerassistant:reviewEnd");
+
 			},
 
 			onCertificateWindowLoaded: function() {
@@ -100,19 +86,6 @@ define(function(require) {
 				this.certificate.$image.append(image);
 				this.certificate.$image.removeClass('hidden');
 
-				/*var height = this.certificate.window.document.getElementById("background-image").naturalHeight;
-				var width = this.certificate.window.document.getElementById("background-image").naturalWidth;
-				var rheight = this.certificate.$image.height();
-				var rwidth = this.certificate.$image.width();
-
-				if (rwidth != width) {
-
-					this.certificate.$image.find("img").css("width",  (rwidth) + "px"  );
-					this.certificate.$image.find("img").css("height",  ((rwidth/width)*height) + "px"  );
-				}*/
-
-
-
 				if (this.certificate.onDrawPrint) {
 					this.certificate.window.print();
 					this.certificate.onDrawPrint = false;
@@ -129,50 +102,11 @@ define(function(require) {
 				canvas.width = width; 
 				canvas.style.width = "100%"; 
 				canvas.height = height; 
-				//canvas.style.height = height + 'px'; 
 
 				return canvas;
 	      	},
 
-	      	getDate: function() {
-				var dateString = "";
-				var date = new Date();
-				var day = date.getDate();
-				var month = date.getMonth()+1;
-				var year = date.getFullYear();
-
-				dateString += day > 9 ? day : "0" + day; 
-				dateString +=  " / ";
-				dateString +=  month > 9 ? month : "0" + month;
-				dateString +=  " / ";
-				dateString += year;
-
-				return dateString;
-			},
-
-			getUsername: function() {
-				var username = require("extensions/adapt-contrib-spoor/js/scormWrapper").instance.getStudentName();
-				if(!username) username = "Unknown learner";
-				return username;
-			},
-
-			getCourseTitle: function() {
-				return Adapt.course.get("title");
-			},
-	   
 	    	openCertificateWindow: function() {
-	    		/*this.certificate = {
-		          window: undefined,
-		          canvas: undefined,
-		          context: undefined,
-		          $container: undefined,
-		          $image: undefined,
-		          $composite: undefined,
-		          $text: undefined,
-		          onDrawPrint: true,
-		          drawn: false,
-		          imageLoaded: false
-		      	};*/
 		      	this.certificate.onDrawPrint = true;
 
 				var nuWindow = undefined;
@@ -191,10 +125,7 @@ define(function(require) {
 
 					if(nuWindow) nuWindow.focus();
 
-					//var event = new Event('onload');
-					//nuWindow.dispatchEvent(event);
-					//
-					setTimeout(callback, 1000);
+					setTimeout(callback, 2000);
 				}
 				if (this.internalOn) {
 					nuWindow = this.certificate.window = window.open("", "_blank");
@@ -208,7 +139,6 @@ define(function(require) {
 					nuWindow = this.certificate.window = window.open("assets/certificate.html", "Certificate");
 					run();
 				}
-				
 				
 			},
 
@@ -235,7 +165,6 @@ define(function(require) {
 				this.certificate.context = this.certificate.canvas.getContext('2d');
 				this.certificate.context.drawImage(this.certificate.window.document.getElementById("background-image"), 0, 0, width, height);
 
-
 				// text
 				var _learnerassistant = this.model.get("_learnerassistant");
 				var _certificateGraphics = _learnerassistant._certificateGraphics;
@@ -247,9 +176,28 @@ define(function(require) {
 				this.certificate.context.fillStyle = _certificateGraphics._textColor;
 				this.certificate.context.textAlign = "center";
 
-				this.certificate.context.fillText( this.getCourseTitle(), _titleText._left, _titleText._top,  _titleText._maxwidth);
-				this.certificate.context.fillText( this.getUsername(), _userText._left, _userText._top,  _userText._maxwidth);
-				this.certificate.context.fillText( this.getDate(), _dateText._left, _dateText._top,  _dateText._maxwidth);
+				var username = require("extensions/adapt-contrib-spoor/js/scormWrapper").instance.getStudentName();
+				var coursetitle = Adapt.course.get("title");
+				var date = (function () {
+						var dateString = "";
+						var date = new Date();
+						var day = date.getDate();
+						var month = date.getMonth()+1;
+						var year = date.getFullYear();
+
+						dateString += day > 9 ? day : "0" + day; 
+						dateString +=  " / ";
+						dateString +=  month > 9 ? month : "0" + month;
+						dateString +=  " / ";
+						dateString += year;
+
+						return dateString;
+					})();
+				if (!username) username = "Unknown Leaner";
+
+				this.certificate.context.fillText( coursetitle, _titleText._left, _titleText._top,  _titleText._maxwidth);
+				this.certificate.context.fillText( username, _userText._left, _userText._top,  _userText._maxwidth);
+				this.certificate.context.fillText( date, _dateText._left, _dateText._top,  _dateText._maxwidth);
 				
 				// create composite image	
 				var dataUrl = this.certificate.canvas.toDataURL();
@@ -262,6 +210,7 @@ define(function(require) {
 					if (thisHandle.certificate.drawn) return;
 					img.setAttribute('src', dataUrl);
 				}, 5000);
+
 			}
 	    }
 	);

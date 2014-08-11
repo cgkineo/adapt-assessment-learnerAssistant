@@ -17,35 +17,11 @@ define(function(require) {
     LAIfIdOffsetHiddenReturnParentId.swapOutIds = {};
     window.LAIfIdOffsetHiddenReturnParentId = LAIfIdOffsetHiddenReturnParentId;
 
+    
 
-//GLOBAL DEBUGGING HACKS
-    //COMPLETE ASSESSMENT FAILED AND OPEN RESULTS SCREEN
-    window.LACompleteAssessment = function() {
-        var assessmentView = Adapt.articles.find(function(it) { return typeof it.get('_assessment') !== "undefined"; } );
-        Adapt.navigateToElement(assessmentView.get("_id"));
-        setTimeout( function () {
-            Adapt.trigger("assessment:complete", assessmentView.get("assessmentModel").getQuestionModel());
-        }, 1000);
-    };
-
-    //COMPLETE ASSESSMENT PASSED AND OPEN CERTIFICATE SCREEN
-    window.LACompleteAssessmentPassed = function() {
-        var assessmentView = Adapt.articles.find(function(it) { return typeof it.get('_assessment') !== "undefined"; } );
-        Adapt.navigateToElement(assessmentView.get("_id"));
-        var questionModel = assessmentView.get("assessmentModel").getQuestionModel();
-        _.each(questionModel.allQuestions, function(question) {
-            question._isCorrect = true;
-        });
-        questionModel.isPass = true;
-        questionModel.scoreAsPercent = 100;
-        setTimeout( function () {
-            Adapt.trigger("assessment:complete", questionModel);
-            Adapt.bottomnavigation.render();
-        }, 1000);
-    };
-
+//UPDATE BOTTOM NAV WITH ASSESSMENT INTERACTIONS
     window.LABottomNavUpdater = function() {
-        //UPDATE BOTTOM NAV WITH ASSESSMENT INTERACTIONS
+       
 
         //BACKBONE SOMETIMES DOESN'T FIRED QUEUED CHANGE EVENTS ON MODELS
         // change:_isInteractionsComplete accasionally doesn't fire
@@ -71,6 +47,34 @@ define(function(require) {
             }
 
         });
+    };
+
+
+
+//GLOBAL DEBUGGING HACKS
+    //COMPLETE ASSESSMENT FAILED AND OPEN RESULTS SCREEN
+    window.LACompleteAssessment = function() {
+        var assessmentView = Adapt.articles.find(function(it) { return typeof it.get('_assessment') !== "undefined"; } );
+        Adapt.navigateToElement(assessmentView.get("_id"));
+        setTimeout( function () {
+            Adapt.trigger("assessment:complete", assessmentView.get("assessmentModel").getQuestionModel());
+        }, 1000);
+    };
+
+    //COMPLETE ASSESSMENT PASSED AND OPEN CERTIFICATE SCREEN
+    window.LACompleteAssessmentPassed = function() {
+        var assessmentView = Adapt.articles.find(function(it) { return typeof it.get('_assessment') !== "undefined"; } );
+        Adapt.navigateToElement(assessmentView.get("_id"));
+        var questionModel = assessmentView.get("assessmentModel").getQuestionModel();
+        _.each(questionModel.allQuestions, function(question) {
+            question._isCorrect = true;
+        });
+        questionModel.isPass = true;
+        questionModel.scoreAsPercent = 100;
+        setTimeout( function () {
+            Adapt.trigger("assessment:complete", questionModel);
+            Adapt.bottomnavigation.render();
+        }, 1000);
     };
 
 });

@@ -65,7 +65,7 @@ define(function(require) {
 				_state._isInAssessment = true;
 				_state._canAssessmentShowFeedback = articleView.model.get('_assessment')._canShowFeedback;
 				_state._isAssessmentComplete = false;
-				
+
 				//HACK FIX
 				window.LABottomNavUpdater();
 
@@ -75,6 +75,12 @@ define(function(require) {
 				
 				//SETUP MODEL FROM ASSESSMENT
 				learnerassistant.model.setup(questionModel);
+
+				if (_learnerassistant._certificateTitle.length > 0) {
+					_learnerassistant._certificateTitleText = Adapt.course.get("title"); + " - " + _learnerassistant._certificateTitle
+				} else {
+					_learnerassistant._certificateTitleText = Adapt.course.get("title"); + _learnerassistant._certificateTitle
+				}
 
 				//SHOW APPROPRIATE NAV (PAGELEVELPROGRESS)
 				learnerassistant.menu.bottomNavigation.associatedLearning.hide(0);

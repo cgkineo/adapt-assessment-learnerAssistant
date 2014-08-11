@@ -221,13 +221,13 @@ Adapt.learnerassistant.model:
 			"title": "Revision Mode"
 		},
 		"_results": {
-			"_associateLearnings": "Subjects to revise"
+			"_associateLearnings": "Subjects to revise",
 			"_bank": "Subjects for revision",
 			"_reviewed": "Reviewed",
 			"_status": "Your status",
 			"_toReview": "Flagged for review"
 		},
-		"_resultsTitle": "Results"
+		"_resultsTitle": "Results",
 		"_resultsTutorButton": {
 			"_show": true,
 			"body": "Once you begin your revision, click on me again to see your progress",
@@ -236,7 +236,7 @@ Adapt.learnerassistant.model:
 		},
 		"_showAllFailedBankQuestions": false,
 		"_sortResultsBanksBy": "mostInBank",
-		"_start": {
+		"_revision": {
 			"body": "%. Take a look at the revision plan we’ve drawn up for you below. It highlights the subjects that we recommend you review again so that you can have another go at the <b>Test your knowledge assessment</b>. To review the subjects, either select the <b>Launch revision mode</b> button at the bottom of the screen, or select the progress bar in the bottom right. Once you’ve reviewed a subject you’ll see that the flag icon in the revision plan will change to a book, showing that you’ve completed that subject.",
 			"title": "Welcome to your results",
 			"youScored": "You scored"

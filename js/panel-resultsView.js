@@ -36,7 +36,8 @@ define(function(require) {
 			onCloseClick: function(event) {
 				event.preventDefault();
 
-				Adapt.learnerassistant.panel.results.hide();
+				Adapt.trigger("learnerassistant:reviewEnd");
+
 
 			}
 
