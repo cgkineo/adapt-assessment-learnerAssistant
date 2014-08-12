@@ -260,6 +260,8 @@ define(function(require) {
 			_state._views['menu-topnavigation'].$el.remove();
 
 			var id = _state._views['assessment'].model.get("_id");
+
+			learnerassistant.menu.topNavigation.hide();
 			
 			learnerassistant.navigateToId(id);
 
