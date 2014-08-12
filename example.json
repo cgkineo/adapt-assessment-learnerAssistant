@@ -185,7 +185,7 @@ assets/certificate.png
 }
 
 //REQUIRED
-//!!remember to add settings for rollay and bottomnavigation to course.json
+//!!remember to add settings for rollay, bottomnavigation and animate to the course.json
 "_rollay": {
     "_duration": {
         "show": 500,
@@ -200,3 +200,21 @@ assets/certificate.png
     },
     "_showOnMobile": false
 },
+"_animate": {
+    "_animations": [
+        {
+            "_id": "clickstyle",
+            "_events": {
+                "!click .clickstyle" : [
+                    "+ .clickstyle-$ge[data-clickstyle='$ge'] .clickstyle",
+                    "- .clickstyle .clickstyle"
+                ],
+                "!click [data-clickstyle]" : [
+                    "- .clickstyle-$lge [data-clickstyle]",
+                    "+ .clickstyle-$ge[data-clickstyle='$ge'] [data-clickstyle]"
+                ]
+            },
+            "_global": true
+        }
+    ]
+}
