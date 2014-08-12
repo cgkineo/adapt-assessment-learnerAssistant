@@ -19,7 +19,7 @@ define(function(require) {
 
 	//NAVIGATE AWAY GLOBAL TRIGGERS
 		//SCROLL AWAY
-		$(window).on("scroll", function() {
+$(window).on("scroll", function() {
 
 			var isInReview = _state._isInReview;
 			
@@ -28,14 +28,14 @@ define(function(require) {
 		});
 
 		//BACK BUTTON CLICKED OR CHANGE TO MENU SCREEN
-		Adapt.on("navigation:backButton router:menu",  function () { 
+Adapt.on("navigation:backButton router:menu",  function () { 
 
 			Adapt.trigger("learnerassistant:navigateAway");
 
 		})
 
 		//CHANGE TO ANOTHER PAGE
-		.on("router:page", function(model) {
+.on("router:page", function(model) {
 
 			var isAssessmentPage = model.get("_assessment") !== undefined;
 
@@ -44,7 +44,7 @@ define(function(require) {
 		})
 
 		//ROLLAY HIDE
-		.on("rollay:closed", function() {
+.on("rollay:closed", function() {
 
 			learnerassistant.panel.results.hide();
 			learnerassistant.panel.certificate.hide();
@@ -54,7 +54,7 @@ define(function(require) {
 
 	//ASSESSMENT
 		//START ASSESSMENT
-		.on("articleView:postRender", function(articleView) {
+	.on("articleView:postRender", function(articleView) {
 
 			if ( articleView.model.get("assessmentModel") && articleView.model.get('assessmentModel').get('_isEnabled') ) {
 
@@ -93,7 +93,7 @@ define(function(require) {
 		})
 
 		//COMPLETE ASSESSMENT
-		.on("assessment:complete", function(questionModel) {
+	.on("assessment:complete", function(questionModel) {
 			
 			//FIRED ON ASSESSMENT COMPLETE
 			_state._isAssessmentComplete = true;
@@ -126,7 +126,7 @@ define(function(require) {
 					
 					var alertObject = {
 					    title: _notify.title,
-					    body: _notify.youScored + _state.assessmentScoreAsPercent + _notify.body,
+					    body: _notify.youScored + _state._assessmentScoreAsPercent + _notify.body,
 					    confirmText: _notify.button,
 					    _callbackEvent: "learnerassistant:certificateOpen",
 					    _showIcon: false
@@ -167,7 +167,7 @@ define(function(require) {
 
 
 	//MAIN MENU REDIRECT
-		.on('menuView:postRender', function(menuView) {
+	.on('menuView:postRender', function(menuView) {
 			
 			var menuModelLASection = menuView.model.get("_learnerassistant");
 
@@ -203,7 +203,7 @@ define(function(require) {
 
 	//LEARNERASSISTANT EVENTS - END POINTS
 		//OPEN CERTIFICATE VIEW
-		.on("learnerassistant:certificateOpen", function() {
+	.on("learnerassistant:certificateOpen", function() {
 
 			Adapt.trigger("learnerassistant:reviewOn");
 
@@ -226,7 +226,7 @@ define(function(require) {
 		})
 
 		//OPEN RESULTS VIEW
-		.on("learnerassistant:resultsOpen", function() {
+	.on("learnerassistant:resultsOpen", function() {
 			
 			Adapt.trigger("learnerassistant:reviewOn");
 
@@ -248,7 +248,7 @@ define(function(require) {
 		})
 
 		//OPEN QUIZ VIEW
-		.on("learnerassistant:quizOpen", function() {
+	.on("learnerassistant:quizOpen", function() {
 
 			learnerassistant.panel.results.hide();
 
@@ -272,7 +272,7 @@ define(function(require) {
 	//LEARNERASSISTANT EVENTS - REVIEW MODE
 
 		//REVIEWMODE VISUALS ON
-		.on("learnerassistant:reviewOn", function() {
+	.on("learnerassistant:reviewOn", function() {
 
 			_state._isGuidedLearningMode = true;
 
@@ -282,7 +282,7 @@ define(function(require) {
 
 		})
 
-		.on("learnerassistant:reviewBegin", function() {
+	.on("learnerassistant:reviewBegin", function() {
 
 			var _notify = _learnerassistant._beginRevision;
 
@@ -302,7 +302,7 @@ define(function(require) {
 			Adapt.trigger('notify:alert', alertObject);
 		})
 
-		.on("learnerassistant:reviewNext", function() {
+	.on("learnerassistant:reviewNext", function() {
 
 			_state._isInReview = true;
 			_state._isReviewInteractionComplete = false;
@@ -342,7 +342,7 @@ define(function(require) {
 
 		})
 
-		.on("learnerassistant:reviewGotoItem", function(id) {
+	.on("learnerassistant:reviewGotoItem", function(id) {
 
 			_state._isInReview = true;
 			
@@ -358,7 +358,7 @@ define(function(require) {
 		})
 
 		//QUIT GUIDED LEARNING MODE
-		.on("learnerassistant:reviewEnd", function(id) {
+	.on("learnerassistant:reviewEnd", function(id) {
 			
 			var _notify = _learnerassistant._quitGuidedLearning;
 
@@ -389,7 +389,7 @@ define(function(require) {
 		})
 
 		//CLICK ON HELP/TUTOR BUTTON
-		.on("learnerassistant:reviewTutorOpen", function(id) {
+	.on("learnerassistant:reviewTutorOpen", function(id) {
 			
 			var _notify = undefined;
 
@@ -419,7 +419,7 @@ define(function(require) {
 		})
 
 		//COMPLETED CURRENT REVIEW COMPONENT
-		.on("learnerassistant:reviewInteractionComplete", function(model) {
+	.on("learnerassistant:reviewInteractionComplete", function(model) {
 			//RERENDER BOTTOM NAVIGATION (NAVIGATION)
 
 			Adapt.bottomnavigation.render();
@@ -428,12 +428,12 @@ define(function(require) {
 		})
 
 		//COMPLETED REVIEW
-		.on("learnerassistant:reviewComplete", function() {
+	.on("learnerassistant:reviewComplete", function() {
 			
 		})
 	
 		//REVIEWMODE VISUALS OFF
-		.on("learnerassistant:reviewOff", function() {
+	.on("learnerassistant:reviewOff", function() {
 
 			_.delay(function() {
 
@@ -455,7 +455,7 @@ define(function(require) {
 		})
 
 	//NAVIGATE AWAY FROM REVIEW OR ASSESSMENT
-		.on("learnerassistant:navigateAway", function() {
+	.on("learnerassistant:navigateAway", function() {
 
 			if ( !_state._isInReview || _state._isInAssessment ) {
 
@@ -487,7 +487,67 @@ define(function(require) {
 	            }
 
 			}
-		});
+		})
 	
+	//CERTIFICATE PRINT WINDOW
+	.on("learnerassistant:certificatePrint", function() {
+
+			var _settings = JSON.parse(JSON.stringify(_learnerassistant._certificateGraphics));
+
+			var nwindow =  window.open("assets/certificate.html", "Certificate");
+			
+			var loaded = false;
+
+			//READY EVENT FOR NEW WINDOW
+			$(nwindow).bind("load", function() {
+				if (!loaded) render();
+				loaded = true;
+			});
+
+			var impatience = setTimeout(function() {
+				if (!loaded) render();
+				loaded = true;
+			}, 500); // document should have loaded after a second
+
+			function render() {
+				clearTimeout(impatience);
+
+				$("html", nwindow.document).addClass( $("html", window.document).attr("class") );
+
+				if (_settings._rendered === undefined) {
+					//INVOLKED VIA CONSOLE - TESTING ONLY
+					if (_settings._imageURL.substr(0,7) == "assets/") _settings._imageURL = _settings._imageURL.substr(7);
+					_settings._titleText.text = Adapt.course.get("title");
+					_settings._userText.text = require("extensions/adapt-contrib-spoor/js/scormWrapper").instance.getStudentName();
+					if (_settings._userText.text === undefined) _settings._userText.text = "Unknown User";
+
+					learnerassistant.certificateRender(_settings, complete, nwindow.document);
+				} else complete(_settings._rendered);
+			}
+
+			function complete(imgUrl) {
+				var prevTitle = $("title", nwindow.document).html();
+
+				$("title", nwindow.document).html( "Loading..." );
+
+				var img = nwindow.document.createElement("img");
+				$("#image-container", nwindow.document).html("").append(img);
+
+				$(img).load(function() {
+					console.log("Certificate Print: Image loaded");
+					$("title", nwindow.document).html(_settings._titleText.text + " - " + prevTitle);
+					_.delay(function() {
+						console.log("Certificate Print: Print Preview");
+						nwindow.focus();
+						nwindow.print();
+						nwindow.close();
+					}, 0);
+				});
+				
+				img.src = imgUrl;
+
+			}
+			
+		});
 
 });

@@ -78,8 +78,7 @@ define(function(require) {
 			onPrintClick: function(event) {
 				event.preventDefault();
 				
-				var _state = Adapt.learnerassistant.model.get("_state");
-				_state._views['panel-certificate'].openCertificateWindow();
+				Adapt.trigger("learnerassistant:certificatePrint");
 			}
 		}
 		

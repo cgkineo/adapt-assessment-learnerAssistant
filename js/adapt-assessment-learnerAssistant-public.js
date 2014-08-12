@@ -72,6 +72,64 @@ define(function(require) {
 			}
 		},
 
+		certificateRender: function(_settings, callback, outputDocument) {
+			if (typeof outputDocument == "undefined") outputDocument = window.document;
+
+			var inputImg = outputDocument.createElement("img");
+			$(inputImg).bind("load", render);
+			inputImg.src = _settings._imageURL;
+
+			function render() {
+				//Fetch Image Dimensions
+				var height = inputImg.naturalHeight;
+				var width = inputImg.naturalWidth;
+
+				//Create canvas
+				var canvas = outputDocument.createElement("canvas");
+				if (typeof G_vmlCanvasManager != 'undefined') G_vmlCanvasManager.initElement(canvas); 
+				canvas.id = "certificate-canvas";
+				canvas.width = width; 
+				canvas.style.width = "100%"; 
+				canvas.height = height; 
+
+				var context = canvas.getContext('2d');
+				//Draw Image onto context
+				context.drawImage(inputImg, 0, 0, width, height);
+
+				//Text
+				var _titleText = _settings._titleText;
+				var _userText = _settings._userText;
+				var _dateText = _settings._dateText;
+
+				context.font = _settings._textFont;
+				context.fillStyle = _settings._textColor;
+				context.textAlign = "center";
+
+				_dateText.text = (function () {
+						var dateString = "";
+						var date = new Date();
+						var day = date.getDate();
+						var month = date.getMonth()+1;
+						var year = date.getFullYear();
+
+						dateString += day > 9 ? day : "0" + day; 
+						dateString +=  " / ";
+						dateString +=  month > 9 ? month : "0" + month;
+						dateString +=  " / ";
+						dateString += year;
+
+						return dateString;
+					})();
+
+				context.fillText( _titleText.text, _titleText._left, _titleText._top,  _titleText._maxwidth);
+				context.fillText( _userText.text, _userText._left, _userText._top,  _userText._maxwidth);
+				context.fillText( _dateText.text, _dateText._left, _dateText._top,  _dateText._maxwidth);
+				
+				//Create composite image as data url
+				callback(canvas.toDataURL());
+			}
+		},
+
 	//MENU FUNCTIONS
 		menu: {
 

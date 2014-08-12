@@ -32,6 +32,7 @@ LearnerAssistant Responds To Events:
 
 ```
 	learnerassistant:certificateOpen
+	learnerassistant:certificatePrint
 	learnerassistant:navigateAway
 	learnerassistant:quizOpen
 	learnerassistant:resultsOpen
@@ -60,6 +61,8 @@ Adapt.learnerassistant Public Interface:
 ```
 	navigateToId(id)
 	navigateToMainMenu()
+
+	certificateRender(_settings, callback, ownerDocument)
 
 	menu.topNavigation.show()
 	menu.topNavigation.hide()
