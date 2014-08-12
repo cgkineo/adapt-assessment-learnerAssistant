@@ -3,7 +3,7 @@ adapt-assessment-learnerAssistant
 
 Shows associated learning from assessment and navigates between flagged items
 
-Requires: 
+Requires:   
 	[adapt-rollay](http://github.com/cgkineo/adapt-rollay),   
 	[adapt-bottomnavigation](http://github.com/cgkineo/adapt-bottomnavigation),  
 	[adapt-contrib-spoor](http://github.com/cgkineo/adapt-contrib-spoor),  
