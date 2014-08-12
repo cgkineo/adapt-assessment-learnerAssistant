@@ -4,6 +4,7 @@ adapt-assessment-learnerAssistant
 Shows associated learning from assessment and navigates between flagged items
 
 Requires: 
+
 	[adapt-rollay](http://github.com/cgkineo/adapt-rollay), 
 	[adapt-bottomnavigation](http://github.com/cgkineo/adapt-bottomnavigation), 
 	[adapt-contrib-spoor](http://github.com/cgkineo/adapt-contrib-spoor), 
@@ -11,6 +12,7 @@ Requires:
 	[adapt-animate](http://github.com/cgkineo/adapt-contrib-assessment)
 
 Included files (should be placed in build/assets folder):
+
 	assets/certificate.html,  
 	assets/certificate.png  
 
