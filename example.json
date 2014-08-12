@@ -188,7 +188,7 @@ assets/certificate.png
 //!!remember to add settings for rollay, bottomnavigation and animate to the course.json
 "_rollay": {
     "_duration": {
-        "show": 500,
+        "show": 200,
         "hide": 200
     },
     "_forceShow" : false
