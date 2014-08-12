@@ -38,7 +38,7 @@ define(function(require) {
 			_settings._userText.text = require("extensions/adapt-contrib-spoor/js/scormWrapper").instance.getStudentName();
 			if (_settings._userText.text === undefined) _settings._userText.text = "Unknown User";
 
-			Adapt.learnerassistant.certificateRender(_settings, function(imgUrl) {
+			function complete(imgUrl) {
 
 				_settings._rendered = imgUrl;
 
@@ -47,7 +47,10 @@ define(function(require) {
 
 				$("#image-container").html("").append(img);
 
-			});
+			}
+
+			if (_settings._rendered !== undefined) complete(_settings._rendered);
+			else Adapt.learnerassistant.certificateRender(_settings, complete );
 
 		},
 	

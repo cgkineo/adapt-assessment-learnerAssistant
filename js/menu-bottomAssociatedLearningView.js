@@ -71,7 +71,7 @@ define(function(require) {
 			onTutorButtonClick: function(event) {
 				event.preventDefault();
 
-				Adapt.trigger("learnerassistant:reviewTutorOpen");
+				Adapt.trigger("learnerassistant:tutorOpen");
 
 			},
 

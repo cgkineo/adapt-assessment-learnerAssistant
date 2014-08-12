@@ -19,32 +19,38 @@ define(function(require) {
 
 	//NAVIGATE AWAY GLOBAL TRIGGERS
 		//SCROLL AWAY
-$(window).on("scroll", function() {
+	$(window).on("scroll", function() {
 
 			var isInReview = _state._isInReview;
+			var isInitialised = _state._isInitialised;
 			
-			if ( isInReview ) Adapt.trigger("learnerassistant:navigateAway");
+			if ( isInReview  && isInitialised ) Adapt.trigger("learnerassistant:navigateAway");
 
 		});
 
 		//BACK BUTTON CLICKED OR CHANGE TO MENU SCREEN
-Adapt.on("navigation:backButton router:menu",  function () { 
+	Adapt.on("navigation:backButton router:menu",  function () { 
 
-			Adapt.trigger("learnerassistant:navigateAway");
+			var isInReview = _state._isInReview;
+			var isInAssessment = _state._isInAssessment;
+			var isInitialised = _state._isInitialised;
+
+			if ( (isInReview || isInAssessment) && isInitialised  ) Adapt.trigger("learnerassistant:navigateAway");
 
 		})
 
 		//CHANGE TO ANOTHER PAGE
-.on("router:page", function(model) {
+	.on("router:page", function(model) {
 
 			var isAssessmentPage = model.get("_assessment") !== undefined;
+			var isInitialised = _state._isInitialised;
 
-			if ( isAssessmentPage ) Adapt.trigger("learnerassistant:navigateAway");
+			if ( isAssessmentPage && isInitialised ) Adapt.trigger("learnerassistant:navigateAway");
 
 		})
 
 		//ROLLAY HIDE
-.on("rollay:closed", function() {
+	.on("rollay:closed", function() {
 
 			learnerassistant.panel.results.hide();
 			learnerassistant.panel.certificate.hide();
@@ -61,10 +67,7 @@ Adapt.on("navigation:backButton router:menu",  function () {
 				//CAPTURE ASSESSMENT VIEW
 				_state._views['assessment'] = articleView;
 
-				_state._isInReview = false;
-				_state._isInAssessment = true;
 				_state._canAssessmentShowFeedback = articleView.model.get('_assessment')._canShowFeedback;
-				_state._isAssessmentComplete = false;
 
 				//HACK FIX
 				window.LABottomNavUpdater();
@@ -76,17 +79,20 @@ Adapt.on("navigation:backButton router:menu",  function () {
 				//SETUP MODEL FROM ASSESSMENT
 				learnerassistant.model.setup(questionModel);
 
+				_state._isInReview = false;
+				_state._isAssessmentComplete = false;
+				_state._isInAssessment = true;
+
 				if (_learnerassistant._certificateTitle.length > 0) {
 					_learnerassistant._certificateTitleText = Adapt.course.get("title"); + " - " + _learnerassistant._certificateTitle
 				} else {
 					_learnerassistant._certificateTitleText = Adapt.course.get("title"); + _learnerassistant._certificateTitle
 				}
 
-				//SHOW APPROPRIATE NAV (PAGELEVELPROGRESS)
-				learnerassistant.menu.bottomNavigation.associatedLearning.hide(0);
-				learnerassistant.menu.bottomNavigation.assessmentProgress.show();
-
 				Adapt.trigger("learnerassistant:initialized");
+
+				//SHOW APPROPRIATE NAV (PAGELEVELPROGRESS)
+				learnerassistant.menu.bottomNavigation.assessmentProgress.show();
 
 				articleView.setReadyStatus();
 			}
@@ -207,9 +213,6 @@ Adapt.on("navigation:backButton router:menu",  function () {
 
 			Adapt.trigger("learnerassistant:reviewOn");
 
-			//HIDE PAGELEVELPROGRESS NAV
-			learnerassistant.menu.bottomNavigation.assessmentProgress.hide(0);
-
 			//MOVE BACK TO MAIN MENU
 			learnerassistant.navigateToMainMenu();
 
@@ -221,17 +224,12 @@ Adapt.on("navigation:backButton router:menu",  function () {
 
 			learnerassistant.menu.bottomNavigation.associatedLearning.show();
 
-
-			
 		})
 
 		//OPEN RESULTS VIEW
 	.on("learnerassistant:resultsOpen", function() {
 			
 			Adapt.trigger("learnerassistant:reviewOn");
-
-			//HIDE PAGELEVELPROGRESS NAV
-			learnerassistant.menu.bottomNavigation.assessmentProgress.hide(0);
 
 			//MOVE BACK TO MAIN MENU
 			learnerassistant.navigateToMainMenu();
@@ -250,12 +248,12 @@ Adapt.on("navigation:backButton router:menu",  function () {
 		//OPEN QUIZ VIEW
 	.on("learnerassistant:quizOpen", function() {
 
-			learnerassistant.panel.results.hide();
+			//learnerassistant.panel.results.hide();
 
 			_state._isInReview = false;
 			_state._isAssessmentComplete = false;
 			_state._isAssessmentPassed = false;
-			_state._isGuidedLearningMode = false;
+			_state._isGuidedLearningMode = true;
 
 			$("html").removeClass("guided-learning-mode");
 
@@ -389,7 +387,7 @@ Adapt.on("navigation:backButton router:menu",  function () {
 		})
 
 		//CLICK ON HELP/TUTOR BUTTON
-	.on("learnerassistant:reviewTutorOpen", function(id) {
+	.on("learnerassistant:tutorOpen", function(id) {
 			
 			var _notify = undefined;
 
@@ -420,9 +418,11 @@ Adapt.on("navigation:backButton router:menu",  function () {
 
 		//COMPLETED CURRENT REVIEW COMPONENT
 	.on("learnerassistant:reviewInteractionComplete", function(model) {
-			//RERENDER BOTTOM NAVIGATION (NAVIGATION)
-
+			
+			//RERENDER BOTTOM NAVIGATION
 			Adapt.bottomnavigation.render();
+
+			//RERENDER DRAWER
 			if (typeof _state._views['drawer-assoclearn'].render == "function") _state._views['drawer-assoclearn'].render();
 
 		})
@@ -438,15 +438,15 @@ Adapt.on("navigation:backButton router:menu",  function () {
 			_.delay(function() {
 
 				learnerassistant.panel.results.hide();
+				learnerassistant.panel.certificate.hide();
+				learnerassistant.menu.bottomNavigation.associatedLearning.hide();
+				learnerassistant.menu.topNavigation.hide();
 
 				_state._isGuidedLearningMode = false;
 				_state._isInReview = false;
 				_state._isInAssessment = false;
 
 				$("html").removeClass("guided-learning-mode");
-
-				learnerassistant.menu.bottomNavigation.associatedLearning.hide();
-				learnerassistant.menu.topNavigation.hide();
 
 				learnerassistant.navigateToMainMenu();
 
@@ -461,10 +461,11 @@ Adapt.on("navigation:backButton router:menu",  function () {
 
 				_state._isInAssessment = false;
 
-				learnerassistant.menu.bottomNavigation.assessmentProgress.hide();
+				if ( !_state._isGuidedLearningMode ) learnerassistant.menu.bottomNavigation.assessmentProgress.hide();
 
 			} else if ( _state._isInReview || !_state._isInAssessment ) {
 
+				//RENDER AND STATUS UPDATE ON BOTTOM NAV WHEN NAVIGATE AWY FROM CURRENTASSOCIATEDLEARNINGID
 				if (_state._currentAssociatedLearningID == "") return;
 
 	        	var currentLearningId = _state._currentAssociatedLearningID;

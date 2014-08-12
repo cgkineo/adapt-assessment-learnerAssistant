@@ -1,3 +1,4 @@
+//REQUIRED
 //TO GO IN COURSE.JSON FILE
 "_banks" : {
     "1": {
@@ -9,6 +10,7 @@
     //bank ids + titles
 },
 
+//REQUIRED
 //TO GO IN COURSE.JSON FILE
 "_learnerassistant": {
     "_beforeCertificate": { //after assessment completion, before certificate view
@@ -133,18 +135,25 @@
     }
 },
 
-
-//-either- to go on each quiz component that should not show in menu-bottomAssessmentProgress
-//-or- to go on each associated learning item that should not show in revision
-"_learningassistentProgress": {
-    "_isEnabled":false
-}
-
+//REQUIRED
 //add to quiz component to allow component to show in assessment progress bar
 "_pageLevelProgress": {
     "_useAssessment": true
 }
 
+//REQUIRED
+//add to quiz component to give it associated learnings
+"_associatedLearning": ["b-05", "a-01", "c-92" ]
+
+
+//OPTIONAL
+//-either- to go on each quiz component that should NOT show in menu-bottomAssessmentProgress
+//-or- to go on each associated learning item that should NOT show in revision
+"_learningassistentProgress": {
+    "_isEnabled":false
+}
+
+//OPTIONAL
 //uses article.json
 {
     "_assessment": {
@@ -152,11 +161,13 @@
     }
 }
 
+//REQUIRED
 //uses course.json
 {
     "title": "Welcome to Adapt Learning - v1.1.0",
 }
 
+//OPTIONAL
 //to have main menu redirect to certificate once assessment is passed add to assessment parent menu in contentObject.json
 {
     "_learnerassistant": {
@@ -164,7 +175,7 @@
     }
 }
 
-
+//REQUIRED
 //!!remember to add settings for rollay and bottomnavigation to course.json
 "_rollay": {
     "_duration": {

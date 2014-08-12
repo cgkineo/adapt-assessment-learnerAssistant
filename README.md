@@ -5,20 +5,22 @@ Shows associated learning from assessment and navigates between flagged items
 
 Requires: adapt-rollay, adapt-bottomnavigation, adapt-contrib-spoor, adapt-contrib-assessment
 
-
+Included files: assets/certificate.html
+Included files: assets/
 
 LearnerAssistant Components:
 
 	Model: Basic backbone model with two new functions, model.setup(questionModel) and model.update(questionModel)
 	Model Private: Methods for creating model structures for guided learning banks, path and templates
-	Public: Adapt.learnerassistant public Interface
-	Controller: Events > Behaviour
+	Public: Adapt.learnerassistant public interface
+	Controller: Listens to events and runs appropriate behaviour
 	Drawer: Showing guided learning review items
 	Bottom Menu Assessment Progress: Showing assessment completion progress
 	Bottom Menu Associated Learning: Showing guided learning navigation controls
 	Top Menu: Showing title and tutor/help button
 	Panel Certificate: Showing assessment certificate
 	Panel Results: Showing assessment results and guided learning outcomes
+	Print Window: Showing assessment certificate for printing
 
 LearnerAssistant Dependencies:
 
@@ -44,7 +46,7 @@ LearnerAssistant Responds To Events:
 	learnerassistant:reviewNext
 	learnerassistant:reviewOff
 	learnerassistant:reviewOn
-	learnerassistant:reviewTutorOpen
+	learnerassistant:tutorOpen
 ```
 
 LearnerAssistant Triggers Additional Events:
@@ -158,7 +160,7 @@ Adapt.learnerassistant.model:
 				"_maxwidth": "300",
 				"_top": "620"
 			},
-			"_imageURL": "assets/background-image.png",
+			"_imageURL": "assets/certificate.png",
 			"_textColor": "#CF3239",
 			"_textFont": "18pt sans-serif",
 			"_titleText": {

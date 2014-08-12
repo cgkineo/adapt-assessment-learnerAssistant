@@ -117,6 +117,8 @@ define(function(require) {
 				priv.phase1.call(this, questionModel);
 				
 				//CANCEL IF ASSESSMENT IS NOT COMPLETE
+				_state._isInitialised = true;
+				
 				if (!_state._isAssessmentComplete) return;
 
 				priv.phase2.call(this);

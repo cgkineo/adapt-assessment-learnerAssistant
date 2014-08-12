@@ -46,7 +46,7 @@ define(function(require) {
 
 					Adapt.navigateToElement("." + id, typeNameConversion[element.get("_type")] );
 
-					Adapt.bottomnavigation.render();
+					//Adapt.bottomnavigation.render();
 
 			}
 
@@ -138,7 +138,7 @@ define(function(require) {
 
 				show: function() {
 
-					$(".navigation-inner").append( _state._views['menu-topnavigation'].$el );
+					if (_state._menuTop != "guidedLearning") $(".navigation-inner").append( _state._views['menu-topnavigation'].$el );
 					
 					_state._isMenuTopShown = true;
 					_state._menuTop = "guidedLearning";
@@ -181,6 +181,8 @@ define(function(require) {
 						_state._isMenuBottomAssociatedLearningShown = false;
 						_state._menuBottom = "assessmentProgress";
 
+						_state._views['menu-topnavigation'].render();
+
 						//SHOW NAVIGATION
 						Adapt.bottomnavigation.setCustomView( _state._views['menu-bottomassessprog'] );
 						Adapt.bottomnavigation.render();
@@ -205,6 +207,8 @@ define(function(require) {
 						_state._isMenuBottomAssessmentProgressShown = false;
 						_state._isMenuBottomAssociatedLearningShown = false;
 						_state._menuBottom = "none";
+
+						_state._views['menu-topnavigation'].render();
 					}
 				},
 
@@ -218,6 +222,8 @@ define(function(require) {
 						_state._isMenuBottomAssessmentProgressShown = false;
 						_state._isMenuBottomAssociatedLearningShown = true;
 						_state._menuBottom = "associatedLearning";
+
+						_state._views['menu-topnavigation'].render();
 
 						//CHANGE NAVIGATION VIEW TO LEARNING ASSISTANT FROM PAGELEVELPROGRESS
 						Adapt.bottomnavigation.setCustomView( _state._views['menu-bottomassoclearn'] );
@@ -240,6 +246,8 @@ define(function(require) {
 						_state._isMenuBottomAssessmentProgressShown = false;
 						_state._isMenuBottomAssociatedLearningShown = false;
 						_state._menuBottom = "none";
+
+						_state._views['menu-topnavigation'].render();
 					}
 
 				}
@@ -274,6 +282,8 @@ define(function(require) {
 
 						//RERENDER BOTTOM NAVIGATION
 						Adapt.bottomnavigation.render();
+						learnerassistant.menu.bottomNavigation.associatedLearning.show();
+
 						if (typeof callback == "function") callback();
 
 					});
@@ -289,15 +299,19 @@ define(function(require) {
 					_state._isPanelShown = false;
 					_state._panel = "none";
 
+					//RERENDER TOP NAVIGATION
+					_state._views['menu-topnavigation'].render();
+
 					Adapt.rollay.hide(function() {
 						
 						//RERENDER TOP NAVIGATION
-						_state._views['menu-topnavigation'].render();
+						//_state._views['menu-topnavigation'].render();
 
 						Adapt.trigger("learnerassistant:resultsClosed");
 
 						//RERENDER BOTTON NAVIGATION
 						Adapt.bottomnavigation.render();
+
 						if (typeof callback == "function") callback();
 
 					});
@@ -327,12 +341,13 @@ define(function(require) {
 					Adapt.rollay.render();
 					Adapt.rollay.show(function() {
 
-						_state._views['menu-topnavigation'].render();
+						//_state._views['menu-topnavigation'].render();
 						
 						Adapt.trigger("learnerassistant:certificateOpened");
 
 						//RERENDER BOTTOM NAVIGATION
 						Adapt.bottomnavigation.render();
+						learnerassistant.menu.bottomNavigation.associatedLearning.show();
 
 						if (typeof callback == "function") callback();
 
@@ -352,7 +367,7 @@ define(function(require) {
 					_state._views['menu-topnavigation'].render();
 
 					Adapt.rollay.hide(function() {
-						_state._views['menu-topnavigation'].render();
+						//_state._views['menu-topnavigation'].render();
 
 						Adapt.trigger("learnerassistant:certificateClosed");
 
