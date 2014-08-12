@@ -3,10 +3,12 @@ adapt-assessment-learnerAssistant
 
 Shows associated learning from assessment and navigates between flagged items
 
-Requires: adapt-rollay, adapt-bottomnavigation, adapt-contrib-spoor, adapt-contrib-assessment
+Requires: adapt-rollay, adapt-bottomnavigation, adapt-contrib-spoor, adapt-contrib-assessment, adapt-animate  
 
-Included files: assets/certificate.html
-Included files: assets/
+Included files (should be placed in build/assets folder):   
+assets/certificate.html,  
+assets/certificate.png  
+
 
 LearnerAssistant Components:
 

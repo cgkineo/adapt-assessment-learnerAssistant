@@ -1,3 +1,12 @@
+/*
+Requires: adapt-rollay, adapt-bottomnavigation, adapt-contrib-spoor, adapt-contrib-assessment, adapt-animate  
+
+Included files (should be placed in build/assets folder):
+assets/certificate.html,  
+assets/certificate.png  
+
+*/
+
 //REQUIRED
 //TO GO IN COURSE.JSON FILE
 "_banks" : {
