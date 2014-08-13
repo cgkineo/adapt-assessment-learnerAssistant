@@ -27,21 +27,32 @@
 	}
 
 	//on submitted and hide-feedback, hide buttons
-	.submitted {
-		//MCQ
-		+.buttons.hide-feedback {
-			.buttons-cluster {
-				.buttons-action {
-					display: none !important;
+	
+	//MCQ
+	.mcq-component {
+		.submitted {
+			+.buttons.hide-feedback {
+				.buttons-cluster {
+					.buttons-action {
+						display: none !important;
+					}
 				}
 			}
+		 	
+			.mcq-item-state {
+				display: none !important;
+			}
 		}
+	}
 
-		//GMCQ
-		.buttons.hide-feedback {
-			.buttons-cluster {
-				.buttons-action {
-					display: none !important;
+	//GMCQ
+	.gmcq-component {
+		.submitted {
+			.buttons.hide-feedback {
+				.buttons-cluster {
+					.buttons-action {
+						display: none !important;
+					}
 				}
 			}
 		}
