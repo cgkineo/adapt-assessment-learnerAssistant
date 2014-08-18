@@ -18,42 +18,32 @@
 
 //ASSESSMENT AWARE/FIXES
 	//on _assessment._canShowFeedback == false, hide-feedback = hide-marking
-	.buttons.hide-feedback {
-		.buttons-cluster {
+
+	.component-widget.submitted {
+		+.buttons.hide-feedback, .buttons.hide-feedback {
+			.buttons-cluster {
+				.buttons-action {
+					display: none !important;
+				}
+			}
+	 	}
+
+	 	//MCQ AWARE
+		.mcq-item-state {
+			display: none !important;
+		}
+	}
+	.component-widget {
+		+.buttons.hide-feedback, .buttons.hide-feedback {
+			.buttons-action {
+				width: 100%;
+			}
+			.buttons-feedback {
+				display: none !important;
+			}
 			.buttons-marking-icon {
 				display: none !important;
 			}
 		}
-	}
 
-	//on submitted and hide-feedback, hide buttons
-	
-	//MCQ
-	.mcq-component {
-		.submitted {
-			+.buttons.hide-feedback {
-				.buttons-cluster {
-					.buttons-action {
-						display: none !important;
-					}
-				}
-			}
-		 	
-			.mcq-item-state {
-				display: none !important;
-			}
-		}
-	}
-
-	//GMCQ
-	.gmcq-component {
-		.submitted {
-			.buttons.hide-feedback {
-				.buttons-cluster {
-					.buttons-action {
-						display: none !important;
-					}
-				}
-			}
-		}
 	}
