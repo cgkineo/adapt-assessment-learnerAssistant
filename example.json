@@ -1,9 +1,9 @@
 /*
 Requires: adapt-rollay, adapt-bottomnavigation, adapt-contrib-spoor, adapt-contrib-assessment, adapt-animate  
 
-Included files (should be placed in build/assets folder):
+Included files:
 assets/certificate.html,  
-assets/certificate.png  
+assets/certificate.png //replace with your own certificate image 
 
 */
 
