@@ -57,6 +57,19 @@ define(function(require) {
 
 		})
 
+	.on("componentView:postRender", function(view) {
+		//HIGHLIGHT CURRENT ASSOCIATED LEARNING COMPONENT
+		if (_state._currentAssociatedLearningID == "" || !_state._isInReview) return;
+
+    	var currentLearningId = _state._currentAssociatedLearningID;
+
+    	var model = view.model;
+    	var id = model.get("_id");
+
+    	if (id == currentLearningId) $("."+id).addClass("component-highlight-border");
+
+	})
+
 
 	//ASSESSMENT
 		//START ASSESSMENT
@@ -421,6 +434,11 @@ define(function(require) {
 		//COMPLETED CURRENT REVIEW COMPONENT
 	.on("learnerassistant:reviewInteractionComplete", function(model) {
 			
+			//REMOVE HIGHLIGHT STYLE
+			$("."+model.get("id")).removeClass("component-highlight-border");
+
+			$("#la-next").removeClass("button-highlight-border").addClass("button-highlight-border");
+
 			//RERENDER BOTTOM NAVIGATION
 			Adapt.bottomnavigation.render();
 

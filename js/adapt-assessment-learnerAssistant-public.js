@@ -38,6 +38,9 @@ define(function(require) {
 				"page": "contentObject"
 			};
 
+			//REMOVE HIGHLIGHT FROM PREVIOUS ASSOCIATED LEARNING COMPONENT
+			if (_state._currentAssociatedLearningID != "") $("."+_state._currentAssociatedLearningID).removeClass("component-highlight-border");
+
 			_state._currentAssociatedLearningID = id;
 
 			id = LAIfIdOffsetHiddenReturnParentId(id);
@@ -46,7 +49,8 @@ define(function(require) {
 
 					Adapt.navigateToElement("." + id, typeNameConversion[element.get("_type")] );
 
-					//Adapt.bottomnavigation.render();
+					//HIGHLIGHT CURRENT ASSOCIATED LEARNING COMPONENT
+					$("."+id).addClass("component-highlight-border");
 
 			}
 
