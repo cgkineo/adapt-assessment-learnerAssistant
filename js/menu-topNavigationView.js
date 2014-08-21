@@ -44,7 +44,7 @@ define(function(require) {
 				'click .close': 'onEndClick'
 			},
 
-			onEndClick: function() {
+			onEndClick: function(event) {
 				event.preventDefault();
 
 				Adapt.trigger("learnerassistant:reviewEnd");

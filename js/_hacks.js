@@ -77,4 +77,12 @@ define(function(require) {
         }, 1000);
     };
 
+
+    //ADD TRIM TO STRING
+    if(typeof String.prototype.trim !== 'function') {
+      String.prototype.trim = function() {
+        return this.replace(/^\s+|\s+$/g, ''); 
+      }
+    }
+
 });

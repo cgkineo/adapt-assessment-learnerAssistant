@@ -61,7 +61,7 @@ define(function(require) {
 
 			},
 
-			onEndClick: function() {
+			onEndClick: function(event) {
 				event.preventDefault();
 
 				Adapt.trigger("learnerassistant:reviewEnd");

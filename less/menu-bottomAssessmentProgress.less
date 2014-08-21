@@ -8,6 +8,8 @@
             color: @guided-bar-icon-color;
             &.clickstyle {
                 -webkit-animation: text-shadow-pulse 2s infinite;
+                -ms-animation: pulse 2s infinite;
+                animation: text-shadow-pulse 2s infinite;
             }
             .no-touch &:hover {
                 color: @guided-bar-icon-hover-color;
@@ -248,7 +250,17 @@
     }
 }
 
-
+@keyframes text-shadow-pulse {
+    0% { 
+        text-shadow: 0 0 0 rgba(255,255,255,0.7); 
+    }
+    50% {
+        text-shadow: 0 0 30px rgba(255,255,255,0.7); 
+    }
+    100% { 
+        text-shadow: 0 0 0 rgba(255,255,255,0.7);
+    }
+}
 
 
 
