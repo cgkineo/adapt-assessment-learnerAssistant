@@ -36,7 +36,12 @@ define(function(require) {
 			var _settings = this.model.get("_learnerassistant")._certificateGraphics;
 			_settings._titleText.text = Adapt.course.get("title");
 			_settings._userText.text = require("extensions/adapt-contrib-spoor/js/scormWrapper").instance.getStudentName();
-			if (_settings._userText.text === undefined) _settings._userText.text = "Unknown User";
+			if (_settings._userText.text === undefined) _settings._userText.text = "User, Unknown";
+
+			if (_settings._userText.text.indexOf(",") > -1) {
+				var parts = _settings._userText.text.split(",");
+				_settings._userText.text = parts[1] + " " + parts[0];
+			}
 
 			function complete(imgUrl) {
 
