@@ -57,6 +57,15 @@ define(function(require) {
 
 		})
 
+	.on("popup:closed", function() {
+		var isInReview = _state._isInReview;
+		var isInAssessment = _state._isInAssessment;
+		var isInitialised = _state._isInitialised;
+
+		if ( (isInReview || isInAssessment) && isInitialised  ) Adapt.bottomnavigation.render();
+
+	})
+
 	.on("componentView:postRender", function(view) {
 		//HIGHLIGHT CURRENT ASSOCIATED LEARNING COMPONENT
 		if (_state._currentAssociatedLearningID == "" || !_state._isInReview) return;
@@ -540,7 +549,12 @@ define(function(require) {
 					if (_settings._imageURL.substr(0,7) == "assets/") _settings._imageURL = _settings._imageURL.substr(7);
 					_settings._titleText.text = Adapt.course.get("title");
 					_settings._userText.text = require("extensions/adapt-contrib-spoor/js/scormWrapper").instance.getStudentName();
-					if (_settings._userText.text === undefined) _settings._userText.text = "Unknown User";
+					if (_settings._userText.text === undefined) _settings._userText.text = "User, Unknown";
+
+					if (_settings._userText.text.indexOf(",") > -1) {
+						var parts = _settings._userText.text.split(",");
+						_settings._userText.text = parts[1] + " " + parts[0];
+					}
 
 					learnerassistant.certificateRender(_settings, complete, nwindow.document);
 				} else complete(_settings._rendered);
