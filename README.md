@@ -49,6 +49,8 @@ LearnerAssistant Optionals:
 LearnerAssistant Responds To Events:
 
 ```
+	learnerassistant:assessmentPassed
+	learnerassistant:assessmentFailed
 	learnerassistant:certificateOpen
 	learnerassistant:certificatePrint
 	learnerassistant:navigateAway
