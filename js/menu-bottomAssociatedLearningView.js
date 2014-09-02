@@ -78,7 +78,7 @@ define(function(require) {
 			onPrintClick: function(event) {
 				event.preventDefault();
 				
-				Adapt.trigger("learnerassistant:certificatePrint");
+				Adapt.trigger("learnerassistant:print");
 			}
 		}
 		

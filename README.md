@@ -53,6 +53,7 @@ LearnerAssistant Responds To Events:
 	learnerassistant:navigateAway
 	learnerassistant:quizOpen
 	learnerassistant:resultsOpen
+	learnerassistant:resultsPrint
 	learnerassistant:reviewBegin
 	learnerassistant:reviewComplete
 	learnerassistant:reviewEnd
@@ -167,7 +168,7 @@ Adapt.learnerassistant.model:
 		},
 		"_certificateButtons": {
 			"_end": "Back to Menu",
-			"_print": "Print"
+			"_print": "Print/Save"
 		},
 		"_certificateGraphics": {
 			"_dateText": {
@@ -202,6 +203,9 @@ Adapt.learnerassistant.model:
 			"body": "Now you’ve completed revision mode we’ll take you back to the randomised questions so you can retake the assessment.",
 			"button": "Take assessment",
 			"title": "Time to try again"
+		},
+		"_resultsButtons": {
+			"_print": "Print/Save"
 		},
 		"_guidedLearningButtons": {
 			"_continue": "Continue Revision",
@@ -260,7 +264,8 @@ Adapt.learnerassistant.model:
 			"body": "%. Take a look at the revision plan we’ve drawn up for you below. It highlights the subjects that we recommend you review again so that you can have another go at the <b>Test your knowledge assessment</b>. To review the subjects, either select the <b>Launch revision mode</b> button at the bottom of the screen, or select the progress bar in the bottom right. Once you’ve reviewed a subject you’ll see that the flag icon in the revision plan will change to a book, showing that you’ve completed that subject.",
 			"title": "Welcome to your results",
 			"youScored": "You scored"
-		}
+		},
+		"_printSaveInstructions": "Select the image to save or print"
 	},
 	"_state": { // created at runtime
 		"_assessmentScore": 0, //derived from assessmentModel.getQuestionModel()
@@ -285,6 +290,7 @@ Adapt.learnerassistant.model:
 		"_isPanelCertificateShown": false,
 		"_isPanelResultsShown": false,
 		"_isPanelShown": false,
+		"_isResultsPrintable": false,
 		"_isReviewComplete": false,
 		"_isReviewInteractionComplete": false,
 		"_isReviewNeeded": false,
@@ -293,6 +299,7 @@ Adapt.learnerassistant.model:
 		"_panel": "none",
 		"_percentageReviewedAssociateLearning": 0,
 		"_reviewInteractionEventsAttached": false,
+		"_resultsPrintImage": "data:image/png;base64,....",
 		"_views": {
 			"assessment": Backbone.View,
 			"drawer-assoclearn": Backbone.View,
@@ -357,7 +364,7 @@ assets/certificate.png //replace with your own certificate image
     },
     "_certificateButtons": { //certificate bottom navigation buttons
         "_end": "Back to Menu",
-        "_print": "Print"
+        "_print": "Print/Save"
     },
     "_certificateGraphics": {  //certificate image, text and text placement
         "_dateText": {
@@ -392,6 +399,9 @@ assets/certificate.png //replace with your own certificate image
         "body": "Now you’ve completed revision mode we’ll take you back to the randomised questions so you can retake the assessment.",
         "button": "Take assessment",
         "title": "Time to try again"
+    },
+    "_resultsButtons": {
+        "_print": "Print/Save"
     },
     "_guidedLearningButtons": { // revision mode and results panel bottom navigation buttons
         "_continue": "Continue Revision",
@@ -450,7 +460,8 @@ assets/certificate.png //replace with your own certificate image
         "body": "%. Take a look at the revision plan we’ve drawn up for you below. It highlights the subjects that we recommend you review again so that you can have another go at the <b>Test your knowledge assessment</b>. To review the subjects, either select the <b>Launch revision mode</b> button at the bottom of the screen, or select the progress bar in the bottom right. Once you’ve reviewed a subject you’ll see that the flag icon in the revision plan will change to a book, showing that you’ve completed that subject.",
         "title": "Welcome to your results",
         "youScored": "You scored"
-    }
+    },
+	"_printSaveInstructions": "Select the image to save or print"
 },
 
 //REQUIRED

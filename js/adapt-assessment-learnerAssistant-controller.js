@@ -52,6 +52,8 @@ define(function(require) {
 		//ROLLAY HIDE
 	.on("rollay:closed", function() {
 
+			if (!_state._isPanelCertificateShown && !_state._isPanelResultsShown) return;
+
 			learnerassistant.panel.results.hide();
 			learnerassistant.panel.certificate.hide();
 
@@ -167,7 +169,7 @@ define(function(require) {
 
 			//RESULTS REQUIRED
 			_state._isPanelResultsShown = true;
-			_state._isCertificateShown = false;
+			_state._isPanelCertificateShown = false;
 			_state._views['menu-topnavigation'].render();
 
 			Adapt.trigger("learnerassistant:reviewOn");
@@ -257,7 +259,21 @@ define(function(require) {
 			learnerassistant.navigateToMainMenu();
 
 			//SHOW THE RESULTS
-			learnerassistant.panel.results.show();
+			learnerassistant.panel.results.show(function() {
+				var resultsView = _state._views['panel-results'].$el;
+				html2img(  resultsView , function(data) {
+					
+					//add print button
+					_state._resultsPrintImage = data;
+					_state._isResultsPrintable = true;
+					Adapt.bottomnavigation.render();
+
+	        		/*var img = $("<img>").attr("src", data);
+	        		resultsView.children().remove();
+	        		resultsView.append(img);*/
+
+				});
+			});
 
 			//RERENDER TOP NAVIGATION
 			_state._views['menu-topnavigation'].render();
@@ -519,12 +535,20 @@ define(function(require) {
 			}
 		})
 	
+	.on("learnerassistant:print", function() {
+		if (_state._isPanelCertificateShown) {
+			Adapt.trigger("learnerassistant:certificatePrint");
+		} else if (_state._isPanelResultsShown) {
+			Adapt.trigger("learnerassistant:resultsPrint");
+		}
+	})
+
 	//CERTIFICATE PRINT WINDOW
 	.on("learnerassistant:certificatePrint", function() {
 
 			var _settings = JSON.parse(JSON.stringify(_learnerassistant._certificateGraphics));
 
-			var nwindow =  window.open("assets/certificate.html", "Certificate");
+			var nwindow =  window.open("assets/print.html", "Certificate");
 			
 			var loaded = false;
 
@@ -561,21 +585,19 @@ define(function(require) {
 			}
 
 			function complete(imgUrl) {
-				var prevTitle = $("title", nwindow.document).html();
+				var prevTitle = "Certificate"; //$("title", nwindow.document).html();
 
 				$("title", nwindow.document).html( "Loading..." );
 
 				var img = nwindow.document.createElement("img");
 				$("#image-container", nwindow.document).html("").append(img);
 
+				$("#printSaveInstructions", nwindow.document).html(_learnerassistant._printSaveInstructions);
+				
 				$(img).load(function() {
-					console.log("Certificate Print: Image loaded");
 					$("title", nwindow.document).html(_settings._titleText.text + " - " + prevTitle);
 					_.delay(function() {
-						console.log("Certificate Print: Print Preview");
 						nwindow.focus();
-						nwindow.print();
-						nwindow.close();
 					}, 0);
 				});
 				
@@ -583,6 +605,46 @@ define(function(require) {
 
 			}
 			
-		});
+		})
 
+	//RESULTS PRINT WINDOW
+	.on("learnerassistant:resultsPrint", function() {
+
+			var nwindow =  window.open("assets/print.html", "Results");
+			
+			var loaded = false;
+
+			//READY EVENT FOR NEW WINDOW
+			$(nwindow).bind("load", function() {
+				if (!loaded) complete();
+				loaded = true;
+			});
+
+			var impatience = setTimeout(function() {
+				if (!loaded) complete();
+				loaded = true;
+			}, 500); // document should have loaded after a second
+
+			function complete() {
+				var prevTitle = "Results";//$("title", nwindow.document).html();
+
+				$("title", nwindow.document).html( "Loading..." );
+
+				var img = nwindow.document.createElement("img");
+				$("#image-container", nwindow.document).html("").append(img);
+
+				$("#printSaveInstructions", nwindow.document).html(_learnerassistant._printSaveInstructions);
+
+				$(img).load(function() {
+					$("title", nwindow.document).html(prevTitle);
+					_.delay(function() {
+						nwindow.focus();
+					}, 0);
+				});
+				
+				img.src = _state._resultsPrintImage;
+
+			}
+			
+		});
 });

@@ -40,6 +40,12 @@
         }
 
         &.not-reviewed.is-resultsshown.not-inreview {
+            &.is-printable {
+                #la-print {
+                    display: inline-block;
+                }
+            }
+
             #la-revision {
                 display: inline-block;
             }
@@ -66,6 +72,13 @@
             }
         }
         &.is-reviewed.is-resultsshown {
+
+            &.is-printable {
+                #la-print {
+                    display: inline-block;
+                }
+            }
+
             #la-end {
                 display: inline-block;
             }
