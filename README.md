@@ -13,7 +13,7 @@ Requires:
 
 Included files:
 
-	assets/certificate.html,  
+	assets/print.html,  
 	assets/certificate.png (to be replaced with your own certificate background image)   
 
 
