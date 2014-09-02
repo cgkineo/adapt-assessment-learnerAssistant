@@ -8,11 +8,12 @@ Requires:
 	[adapt-bottomnavigation](http://github.com/cgkineo/adapt-bottomnavigation),  
 	[adapt-contrib-spoor](http://github.com/cgkineo/adapt-contrib-spoor),  
 	[adapt-contrib-assessment](http://github.com/cgkineo/adapt-contrib-assessment),  
-	[adapt-animate](http://github.com/cgkineo/adapt-contrib-assessment)  
+	[adapt-animate](http://github.com/cgkineo/adapt-animate)  
+	[adapt-html2img](http://github.com/cgkineo/adapt-html2img)  
 
 Included files:
 
-	assets/certificate.html,  
+	assets/print.html,  
 	assets/certificate.png (to be replaced with your own certificate background image)   
 
 
