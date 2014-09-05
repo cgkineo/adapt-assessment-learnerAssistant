@@ -10,10 +10,10 @@ Requires:
 	[adapt-contrib-assessment](http://github.com/cgkineo/adapt-contrib-assessment),  
 	[adapt-animate](http://github.com/cgkineo/adapt-animate)  
 	[adapt-html2img](http://github.com/cgkineo/adapt-html2img)  
+	[adapt-printPreview](http://github.com/cgkineo/adapt-printPreview)  
 
 Included files:
 
-	assets/print.html,  
 	assets/certificate.png (to be replaced with your own certificate background image)   
 
 
