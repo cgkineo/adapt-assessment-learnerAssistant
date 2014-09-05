@@ -35,8 +35,25 @@ define(function(require) {
 
 			var _settings = this.model.get("_learnerassistant")._certificateGraphics;
 			_settings._titleText.text = Adapt.course.get("title");
-			_settings._userText.text = require("extensions/adapt-contrib-spoor/js/scormWrapper").instance.getStudentName();
-			if (_settings._userText.text === undefined) _settings._userText.text = "User, Unknown";
+			_settings._userText.text = undefined;
+			if (require("extensions/adapt-contrib-spoor/js/scormWrapper") !== undefined) {
+				_settings._userText.text = require("extensions/adapt-contrib-spoor/js/scormWrapper").instance.getStudentName();
+			}
+			if (_settings._userText.text === undefined || _settings._userText.text == "undefined") {
+				if (Adapt.course.get('_username') === undefined) {
+					if (this.model.get("_learnerassistant")._canPromptForName) {
+						if (Adapt['name-input'].isOpen === true) return;
+						Adapt.trigger("name-input:open");
+						Adapt.once("name-input:closed", function() {
+							_settings._userText.text = Adapt.course.get('_username')
+							if (_settings._rendered !== undefined) complete(_settings._rendered);
+							else Adapt.learnerassistant.certificateRender(_settings, complete );
+						});
+						return;
+					}
+					_settings._userText.text = "User, Unknown";
+				} else _settings._userText.text = Adapt.course.get('_username');
+			}
 
 			if (_settings._userText.text.indexOf(",") > -1) {
 				var parts = _settings._userText.text.split(",");

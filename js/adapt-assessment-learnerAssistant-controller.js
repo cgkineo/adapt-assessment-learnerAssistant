@@ -34,18 +34,24 @@ define(function(require) {
 			var isInReview = _state._isInReview;
 			var isInAssessment = _state._isInAssessment;
 			var isInitialised = _state._isInitialised;
+			var isPanelResultsShown = _state._isPanelResultsShown;
+			var isPanelCertificateShown = _state._isPanelCertificateShown;
 
-			if ( (isInReview || isInAssessment) && isInitialised  ) Adapt.trigger("learnerassistant:navigateAway");
+			if ( (isInAssessment && isInitialised) || (isInReview && isInitialised) || (isPanelResultsShown && isInitialised) ||(isPanelCertificateShown && isInitialised)  ) Adapt.trigger("learnerassistant:navigateAway");
+
 
 		})
 
 		//CHANGE TO ANOTHER PAGE
 	.on("router:page", function(model) {
 
+			var isInReview = _state._isInReview;
 			var isAssessmentPage = model.get("_assessment") !== undefined;
 			var isInitialised = _state._isInitialised;
+			var isPanelResultsShown = _state._isPanelResultsShown;
+			var isPanelCertificateShown = _state._isPanelCertificateShown;
 
-			if ( isAssessmentPage && isInitialised ) Adapt.trigger("learnerassistant:navigateAway");
+			if ( (isAssessmentPage && isInitialised) || (isInReview && isInitialised) ||  ((isPanelResultsShown || isPanelCertificateShown) && isInitialised)  ) Adapt.trigger("learnerassistant:navigateAway");
 
 		})
 
@@ -128,7 +134,7 @@ define(function(require) {
 			//FIRED ON ASSESSMENT COMPLETE
 			_state._isAssessmentComplete = true;
 			_state._isInAssessment = false;
-			
+
 			//UPDATE THE MODEL
 			learnerassistant.model.update(questionModel);
 
@@ -212,24 +218,34 @@ define(function(require) {
 			//CANCEL IF THIS MENU != ASSESSMENT MENU
 			if ( pageId !== menuView.model.get("_id") ) return;
 
-			//CANCEL IF IS NOT PASSED
-			if (! _state._isAssessmentPassed ) return;
-
 			var menuItemElement = menuView.$el;
-
-			//TURN OFF CLICK EVENTS ON MENU ITEM
-			menuItemElement.off("click");
-
+			
 			//REDIRECT CLICK EVENT TO CERTIFICATE
 			menuItemElement.on("click", function(event) {
 
+				//CANCEL IF IS NOT PASSED
+				if (! _state._isAssessmentPassed ) return;
+				
+				//TURN OFF CLICK EVENTS ON MENU ITEM
 				event.preventDefault();
+				event.stopPropagation();
 				Adapt.trigger("learnerassistant:certificateOpen");
 
 			});
 
 		})
 
+
+	.on("router:plugin:la", function( pluginName, location, action ) {
+		switch(location) {
+		case "certificate":
+			Adapt.trigger("learnerassistant:certificateOpen");
+			break;
+		case "results":
+			Adapt.trigger("learnerassistant:resultsOpen");
+			break;
+		}
+	})
 
 	//LEARNERASSISTANT EVENTS - END POINTS
 		//OPEN CERTIFICATE VIEW
@@ -238,7 +254,8 @@ define(function(require) {
 			Adapt.trigger("learnerassistant:reviewOn");
 
 			//MOVE BACK TO MAIN MENU
-			learnerassistant.navigateToMainMenu();
+			//learnerassistant.navigateToMainMenu();
+			learnerassistant.navigateToOther("certificate");
 
 			//SHOW THE RESULTS
 			learnerassistant.panel.certificate.show();
@@ -256,11 +273,12 @@ define(function(require) {
 			Adapt.trigger("learnerassistant:reviewOn");
 
 			//MOVE BACK TO MAIN MENU
-			learnerassistant.navigateToMainMenu();
+			//learnerassistant.navigateToMainMenu();
+			learnerassistant.navigateToOther("results");
 
 			//SHOW THE RESULTS
 			learnerassistant.panel.results.show(function() {
-				var resultsView = _state._views['panel-results'].$el;
+				var resultsView = _state._views['panel-results'].$el.find(".la-content-container");
 				html2img(  resultsView , function(data) {
 					
 					//add print button
@@ -500,13 +518,17 @@ define(function(require) {
 		})
 
 	//NAVIGATE AWAY FROM REVIEW OR ASSESSMENT
-	.on("learnerassistant:navigateAway", function() {
+	.on("learnerassistant:navigateAway", function() { 
 
-			if ( !_state._isInReview || _state._isInAssessment ) {
+			if ( !_state._isInReview || _state._isInAssessment  ) {
 
 				_state._isInAssessment = false;
 
 				if ( !_state._isGuidedLearningMode ) learnerassistant.menu.bottomNavigation.assessmentProgress.hide();
+
+				if (  _state._isPanelCertificateShown || _state._isPanelResultsShown  ) {
+					Adapt.trigger("learnerassistant:reviewOff");
+				}
 
 			} else if ( _state._isInReview || !_state._isInAssessment ) {
 
@@ -547,104 +569,53 @@ define(function(require) {
 	.on("learnerassistant:certificatePrint", function() {
 
 			var _settings = JSON.parse(JSON.stringify(_learnerassistant._certificateGraphics));
-
-			var nwindow =  window.open("assets/print.html", "Certificate");
 			
-			var loaded = false;
+			Adapt.trigger("printPreview:open", {
+				instructions: _learnerassistant.printSaveInstructions,
+				title: _settings._titleText.text,
+				_rendered: _settings._rendered,
+				postRender: function(settings) {
 
-			//READY EVENT FOR NEW WINDOW
-			$(nwindow).bind("load", function() {
-				if (!loaded) render();
-				loaded = true;
+					var img = this.model.get("document").createElement("img");
+
+					this.$el.html("").append(img);
+
+					var thisHandle = this;
+
+					$(img).load(function() {
+						_.delay(function() {
+							 thisHandle.setFocus();
+						}, 0);
+					});
+					
+					img.src = settings._rendered;
+				}
 			});
-
-			var impatience = setTimeout(function() {
-				if (!loaded) render();
-				loaded = true;
-			}, 500); // document should have loaded after a second
-
-			function render() {
-				clearTimeout(impatience);
-
-				$("html", nwindow.document).addClass( $("html", window.document).attr("class") );
-
-				if (_settings._rendered === undefined) {
-					//INVOLKED VIA CONSOLE - TESTING ONLY
-					if (_settings._imageURL.substr(0,7) == "assets/") _settings._imageURL = _settings._imageURL.substr(7);
-					_settings._titleText.text = Adapt.course.get("title");
-					_settings._userText.text = require("extensions/adapt-contrib-spoor/js/scormWrapper").instance.getStudentName();
-					if (_settings._userText.text === undefined) _settings._userText.text = "User, Unknown";
-
-					if (_settings._userText.text.indexOf(",") > -1) {
-						var parts = _settings._userText.text.split(",");
-						_settings._userText.text = parts[1] + " " + parts[0];
-					}
-
-					learnerassistant.certificateRender(_settings, complete, nwindow.document);
-				} else complete(_settings._rendered);
-			}
-
-			function complete(imgUrl) {
-				var prevTitle = "Certificate"; //$("title", nwindow.document).html();
-
-				$("title", nwindow.document).html( "Loading..." );
-
-				var img = nwindow.document.createElement("img");
-				$("#image-container", nwindow.document).html("").append(img);
-
-				$("#printSaveInstructions", nwindow.document).html(_learnerassistant._printSaveInstructions);
-				
-				$(img).load(function() {
-					$("title", nwindow.document).html(_settings._titleText.text + " - " + prevTitle);
-					_.delay(function() {
-						nwindow.focus();
-					}, 0);
-				});
-				
-				img.src = imgUrl;
-
-			}
-			
 		})
 
 	//RESULTS PRINT WINDOW
 	.on("learnerassistant:resultsPrint", function() {
+			Adapt.trigger("printPreview:open", {
+				instructions: _learnerassistant.printSaveInstructions,
+				title: "Results",
+				_rendered: _state._resultsPrintImage,
+				postRender: function(settings) {
 
-			var nwindow =  window.open("assets/print.html", "Results");
-			
-			var loaded = false;
+					var img = this.model.get("document").createElement("img");
 
-			//READY EVENT FOR NEW WINDOW
-			$(nwindow).bind("load", function() {
-				if (!loaded) complete();
-				loaded = true;
+					this.$el.html("").append(img);
+
+					var thisHandle = this;
+
+					$(img).load(function() {
+						_.delay(function() {
+							 thisHandle.setFocus();
+						}, 0);
+					});
+					
+					img.src = settings._rendered;
+
+				}
 			});
-
-			var impatience = setTimeout(function() {
-				if (!loaded) complete();
-				loaded = true;
-			}, 500); // document should have loaded after a second
-
-			function complete() {
-				var prevTitle = "Results";//$("title", nwindow.document).html();
-
-				$("title", nwindow.document).html( "Loading..." );
-
-				var img = nwindow.document.createElement("img");
-				$("#image-container", nwindow.document).html("").append(img);
-
-				$("#printSaveInstructions", nwindow.document).html(_learnerassistant._printSaveInstructions);
-
-				$(img).load(function() {
-					$("title", nwindow.document).html(prevTitle);
-					_.delay(function() {
-						nwindow.focus();
-					}, 0);
-				});
-				
-				img.src = _state._resultsPrintImage;
-
-			}
-			
 		});
 });

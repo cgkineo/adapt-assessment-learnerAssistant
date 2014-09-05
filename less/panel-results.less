@@ -4,9 +4,10 @@
 
 .la-results {
     
-    &.html2img {
-        .la-results-inner {
-            .la-content-container {
+    
+    .la-results-inner {
+        .la-content-container {
+            &.html2img {
                 .la-content-header-row, .la-content-bank-row {
                     .icon {
                         display:none !important;
@@ -170,7 +171,12 @@
 
 //DESKTOP
 @media all and (min-width:@device-width-medium) {
-    .la-results {    
+    .la-results { 
+        .la-content-container {
+                width: 60%;
+                margin: auto;
+        }
+
         .mobile-only {
             display: none;
         }
@@ -209,6 +215,11 @@
 //TABLET/MOBILE
 @media all and (max-width:(@device-width-medium - 1px)) {
     .la-results {    
+        .la-content-container {
+                width: 100%;
+                margin: auto;
+        }
+
         .la-results-inner{
             max-width: 699px;
         }
@@ -234,7 +245,11 @@
 //MOBILE
 @media all and (max-width:(@device-width-small - 1px)) {
     .la-results { 
-
+        .la-content-container {
+                width: 100%;
+                margin: auto;
+        }
+        
        .la-results-inner{
             max-width: 400px;
         } 

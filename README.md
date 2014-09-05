@@ -142,6 +142,7 @@ Adapt.learnerassistant.model:
 		}....
 	],
 	"_learnerassistant": { //linked directly from course.json "_learnerassistant", specified by user
+		"_canPromptForName": true,
 		"_beforeCertificate": {
 			"_show": true,
 			"body": "%",
@@ -338,6 +339,7 @@ assets/certificate.png //replace with your own certificate image
 //REQUIRED
 //TO GO IN COURSE.JSON FILE
 "_learnerassistant": {
+	"_canPromptForName": true,
     "_beforeCertificate": { //after assessment completion, before certificate view
         "_show": true,
         "body": "%",
@@ -557,5 +559,11 @@ assets/certificate.png //replace with your own certificate image
             "_global": true
         }
     ]
+},
+"_name-input": { 
+    "_isShowOnInitialize": false,
+    "title": "Welcome",
+    "body": "This will allow you to print a personalised certificate once you have completed the e-learning.<br/><br/>Don't worry, we won't store your details and they won't be shared with any third party.",
+    "input-label": "Enter your name and select SUBMIT"
 }
 ```

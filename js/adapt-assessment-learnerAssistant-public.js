@@ -71,9 +71,14 @@ define(function(require) {
 			} else { 
 
 				//ASSESSMENT PARENT MENU NOT COURSE
+				//Adapt.navigateToElement("."+parentId);
 				Backbone.history.navigate("#/id/" + parentId, {trigger: true, replace: true});
 
 			}
+		},
+
+		navigateToOther: function(page) {
+			Backbone.history.navigate("#/la/"+page, {trigger: false, replace: true});
 		},
 
 		certificateRender: function(_settings, callback, outputDocument) {
