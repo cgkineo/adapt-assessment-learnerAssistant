@@ -131,7 +131,8 @@ define(function(require) {
 		//COMPLETE ASSESSMENT
 	.on("assessment:complete", function(questionModel) {
 			
-			//FIRED ON ASSESSMENT COMPLETE
+			Adapt.trigger("learnerassistant:assessmentComplete", questionModel);
+
 			_state._isAssessmentComplete = true;
 			_state._isInAssessment = false;
 
@@ -142,64 +143,69 @@ define(function(require) {
 			Adapt.bottomnavigation.render();
 
 			//CHECK IF resultsOpen REQUIRED
-			if ( _state._isAssessmentPassed ) {
-				//SHOW CERTIFICATE
+			if ( _state._isAssessmentPassed ) Adapt.trigger("learnerassistant:assessmentPassed");
+			else Adapt.trigger("learnerassistant:assessmentFailed");
+		})
 
-				_state._isPanelResultsShown = false;
-				_state._isPanelCertificateShown = true;
+	.on("learnerassistant:assessmentPassed", function(questionModel) {
 
-				_state._views['menu-topnavigation'].render();
+			//SHOW CERTIFICATE
+			_state._isPanelResultsShown = false;
+			_state._isPanelCertificateShown = true;
 
-				Adapt.trigger("learnerassistant:reviewOn");
-
-				var _notify = _learnerassistant._beforeCertificate;
-
-				if (!_notify._show) {
-
-					Adapt.trigger("learnerassistant:certificateOpen");
-
-				} else {
-					
-					var alertObject = {
-					    title: _notify.title,
-					    body: _notify.youScored + _state._assessmentScoreAsPercent + _notify.body,
-					    confirmText: _notify.button,
-					    _callbackEvent: "learnerassistant:certificateOpen",
-					    _showIcon: false
-					};
-
-					Adapt.trigger('notify:alert', alertObject);
-				}
-				return;
-			}
-
-			//RESULTS REQUIRED
-			_state._isPanelResultsShown = true;
-			_state._isPanelCertificateShown = false;
 			_state._views['menu-topnavigation'].render();
 
 			Adapt.trigger("learnerassistant:reviewOn");
 
-			var _notify = _learnerassistant._beforeRevision;
+			var _notify = _learnerassistant._beforeCertificate;
 
 			if (!_notify._show) {
 
-				Adapt.trigger("learnerassistant:resultsOpen");
+				Adapt.trigger("learnerassistant:certificateOpen");
 
 			} else {
 				
 				var alertObject = {
 				    title: _notify.title,
-				    body: _notify.body,
+				    body: _notify.youScored + _state._assessmentScoreAsPercent + _notify.body,
 				    confirmText: _notify.button,
-				    _callbackEvent: "learnerassistant:resultsOpen",
+				    _callbackEvent: "learnerassistant:certificateOpen",
 				    _showIcon: false
 				};
 
 				Adapt.trigger('notify:alert', alertObject);
 			}
-
 		})
+
+	.on("learnerassistant:assessmentFailed", function(questionModel) {
+
+		//RESULTS REQUIRED
+		_state._isPanelResultsShown = true;
+		_state._isPanelCertificateShown = false;
+		_state._views['menu-topnavigation'].render();
+
+		Adapt.trigger("learnerassistant:reviewOn");
+
+		var _notify = _learnerassistant._beforeRevision;
+
+		if (!_notify._show) {
+
+			Adapt.trigger("learnerassistant:resultsOpen");
+
+		} else {
+			
+			var alertObject = {
+			    title: _notify.title,
+			    body: _notify.body,
+			    confirmText: _notify.button,
+			    _callbackEvent: "learnerassistant:resultsOpen",
+			    _showIcon: false
+			};
+
+			Adapt.trigger('notify:alert', alertObject);
+		}
+		
+	})
 
 
 	//MAIN MENU REDIRECT
