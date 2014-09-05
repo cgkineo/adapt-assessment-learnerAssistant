@@ -510,7 +510,7 @@ assets/certificate.png //replace with your own certificate image
 }
 
 //REQUIRED
-//!!remember to add settings for rollay, bottomnavigation and animate to the course.json
+//!!remember to add settings for rollay, bottomnavigation, printpreview, name-input and animate to the course.json
 "_rollay": {
     "_duration": {
         "show": 200,
@@ -568,5 +568,9 @@ assets/certificate.png //replace with your own certificate image
     "title": "Welcome",
     "body": "This will allow you to print a personalised certificate once you have completed the e-learning.<br/><br/>Don't worry, we won't store your details and they won't be shared with any third party.",
     "input-label": "Enter your name and select SUBMIT"
+}
+"_printPreview": {
+    "title": "Print Preview - ",
+    "loading": "Loading..."
 }
 ```
