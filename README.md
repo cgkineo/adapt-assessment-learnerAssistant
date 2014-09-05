@@ -10,6 +10,7 @@ Requires:
 	[adapt-contrib-assessment](http://github.com/cgkineo/adapt-contrib-assessment),  
 	[adapt-animate](http://github.com/cgkineo/adapt-animate)  
 	[adapt-html2img](http://github.com/cgkineo/adapt-html2img)  
+	[adapt-name-input](http://github.com/cgkineo/adapt-name-input)  
 	[adapt-printPreview](http://github.com/cgkineo/adapt-printPreview)  
 
 Included files:
