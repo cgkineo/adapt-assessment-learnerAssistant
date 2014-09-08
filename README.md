@@ -546,8 +546,8 @@ assets/certificate.png //replace with your own certificate image
             "_id": "component-highlight-border",
             "_events": {
                 "!inview('50%')>timeout(250) .component-highlight-border" : [
-                    "- .flash.times-3.dur-3",
-                    "+ .flash.times-3.dur-3"
+                    "- .flash.times-2.dur-8",
+                    "+ .flash.times-2.dur-8"
                 ]
             },
             "_global": true
@@ -556,8 +556,8 @@ assets/certificate.png //replace with your own certificate image
             "_id": "button-highlight-border",
             "_events": {
                 "!inview('50%')>timeout(250) .button-highlight-border" : [
-                    "- .flash.times-3.dur-3",
-                    "+ .flash.times-3.dur-3"
+                    "- .flash.times-2.dur-8",
+                    "+ .flash.times-2.dur-8"
                 ]
             },
             "_global": true
