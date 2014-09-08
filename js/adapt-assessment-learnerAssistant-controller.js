@@ -29,7 +29,7 @@ define(function(require) {
 		});
 
 		//BACK BUTTON CLICKED OR CHANGE TO MENU SCREEN
-	Adapt.on("navigation:backButton router:menu",  function () { 
+	Adapt.on("router:menu",  function () { 
 
 			var isInReview = _state._isInReview;
 			var isInAssessment = _state._isInAssessment;
@@ -37,6 +37,7 @@ define(function(require) {
 			var isPanelResultsShown = _state._isPanelResultsShown;
 			var isPanelCertificateShown = _state._isPanelCertificateShown;
 
+				if ( _state._isMenuBottomAssessmentProgressShown ) learnerassistant.menu.bottomNavigation.assessmentProgress.hide();
 			if ( (isInAssessment && isInitialised) || (isInReview && isInitialised) || (isPanelResultsShown && isInitialised) ||(isPanelCertificateShown && isInitialised)  ) Adapt.trigger("learnerassistant:navigateAway");
 
 
@@ -51,6 +52,7 @@ define(function(require) {
 			var isPanelResultsShown = _state._isPanelResultsShown;
 			var isPanelCertificateShown = _state._isPanelCertificateShown;
 
+			if ( _state._isMenuBottomAssessmentProgressShown ) learnerassistant.menu.bottomNavigation.assessmentProgress.hide();
 			if ( (isAssessmentPage && isInitialised) || (isInReview && isInitialised) ||  ((isPanelResultsShown || isPanelCertificateShown) && isInitialised)  ) Adapt.trigger("learnerassistant:navigateAway");
 
 		})
@@ -531,7 +533,7 @@ define(function(require) {
 
 				_state._isInAssessment = false;
 
-				if ( !_state._isGuidedLearningMode ) learnerassistant.menu.bottomNavigation.assessmentProgress.hide();
+				if ( _state._isMenuBottomAssessmentProgressShown ) learnerassistant.menu.bottomNavigation.assessmentProgress.hide();
 
 				if (  _state._isPanelCertificateShown || _state._isPanelResultsShown  ) {
 					Adapt.trigger("learnerassistant:reviewOff");
