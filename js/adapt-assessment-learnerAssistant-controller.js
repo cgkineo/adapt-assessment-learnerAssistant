@@ -247,23 +247,23 @@ define(function(require) {
 	.on("router:plugin:la", function( pluginName, location, action ) {
 		switch(location) {
 		case "certificate":
-			Adapt.trigger("learnerassistant:certificateOpen");
+			Adapt.trigger("learnerassistant:certificateOpen", true, false);
 			break;
 		case "results":
-			Adapt.trigger("learnerassistant:resultsOpen");
+			Adapt.trigger("learnerassistant:resultsOpen", true, false);
 			break;
 		}
 	})
 
 	//LEARNERASSISTANT EVENTS - END POINTS
 		//OPEN CERTIFICATE VIEW
-	.on("learnerassistant:certificateOpen", function() {
+	.on("learnerassistant:certificateOpen", function(internal, replace) {
 
 			Adapt.trigger("learnerassistant:reviewOn");
 
 			//MOVE BACK TO MAIN MENU
 			//learnerassistant.navigateToMainMenu();
-			learnerassistant.navigateToOther("certificate");
+			if (!internal) learnerassistant.navigateToOther("certificate", replace);
 
 			//SHOW THE RESULTS
 			learnerassistant.panel.certificate.show();
@@ -276,13 +276,13 @@ define(function(require) {
 		})
 
 		//OPEN RESULTS VIEW
-	.on("learnerassistant:resultsOpen", function() {
+	.on("learnerassistant:resultsOpen", function(internal, replace) {
 			
 			Adapt.trigger("learnerassistant:reviewOn");
 
 			//MOVE BACK TO MAIN MENU
 			//learnerassistant.navigateToMainMenu();
-			learnerassistant.navigateToOther("results");
+			if (!internal) learnerassistant.navigateToOther("results", replace);
 
 			//SHOW THE RESULTS
 			learnerassistant.panel.results.show(function() {
