@@ -466,6 +466,7 @@ define(function(require) {
 				    title: _notify.title,
 				    body: _notify.body,
 				    confirmText: _notify.button,
+				    _callbackEvent: "",
 				    _showIcon: false
 				};
 
