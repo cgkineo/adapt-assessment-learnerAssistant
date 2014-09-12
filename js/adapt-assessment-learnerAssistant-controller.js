@@ -161,6 +161,8 @@ define(function(require) {
 
 			var _notify = _learnerassistant._beforeCertificate;
 
+			_learnerassistant._certificateGraphics._rendered = undefined;
+
 			if (!_notify._show) {
 
 				Adapt.trigger("learnerassistant:certificateOpen");

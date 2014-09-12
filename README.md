@@ -147,6 +147,33 @@ Adapt.learnerassistant.model:
 	],
 	"_learnerassistant": { //linked directly from course.json "_learnerassistant", specified by user
 		"_canPromptForName": true,
+		"_canImproveGrade": true,
+		"_grading": {
+	        "_isEnabled": true,
+	        "_levels": [
+	            {
+	                "_forScoreAsPercent": {
+	                    "_min": 80,
+	                    "_max": 89
+	                },
+	                "displayName": "Bronze"
+	            },
+	            {
+	                "_forScoreAsPercent": {
+	                    "_min": 90,
+	                    "_max": 94
+	                },
+	                "displayName": "Silver"
+	            },
+	            {
+	                "_forScoreAsPercent": {
+	                    "_min": 95,
+	                    "_max": 100
+	                },
+	                "displayName": "Gold"
+	            }
+	        ]
+	    },
 		"_beforeCertificate": {
 			"_show": true,
 			"body": "%",
@@ -173,7 +200,8 @@ Adapt.learnerassistant.model:
 		},
 		"_certificateButtons": {
 			"_end": "Back to Menu",
-			"_print": "Print/Save"
+			"_print": "Print/Save",
+            "_improve": "Try Again"
 		},
 		"_certificateGraphics": {
 			"_dateText": {
@@ -193,7 +221,12 @@ Adapt.learnerassistant.model:
 				"_left": "387.5",
 				"_maxwidth": "300",
 				"_top": "550"
-			}
+			},
+	        "_gradingText": {
+	            "_left": "387.5",
+	            "_maxwidth": "300",
+	            "_top": "680"
+	        }
 		},
 		"_certificateTitle": "Certificate",
 		"_certificateTutorButton": {
@@ -344,6 +377,33 @@ assets/certificate.png //replace with your own certificate image
 //TO GO IN COURSE.JSON FILE
 "_learnerassistant": {
 	"_canPromptForName": true,
+	"_canImproveGrade": true,
+	"_grading": {
+        "_isEnabled": true,
+        "_levels": [
+            {
+                "_forScoreAsPercent": {
+                    "_min": 80,
+                    "_max": 89
+                },
+                "displayName": "Bronze"
+            },
+            {
+                "_forScoreAsPercent": {
+                    "_min": 90,
+                    "_max": 94
+                },
+                "displayName": "Silver"
+            },
+            {
+                "_forScoreAsPercent": {
+                    "_min": 95,
+                    "_max": 100
+                },
+                "displayName": "Gold"
+            }
+        ]
+    },
     "_beforeCertificate": { //after assessment completion, before certificate view
         "_show": true,
         "body": "%",
@@ -370,7 +430,8 @@ assets/certificate.png //replace with your own certificate image
     },
     "_certificateButtons": { //certificate bottom navigation buttons
         "_end": "Back to Menu",
-        "_print": "Print/Save"
+        "_print": "Print/Save",
+        "_improve": "Try Again"
     },
     "_certificateGraphics": {  //certificate image, text and text placement
         "_dateText": {
@@ -390,6 +451,11 @@ assets/certificate.png //replace with your own certificate image
             "_left": "387.5",
             "_maxwidth": "300",
             "_top": "550"
+        },
+        "_gradingText": {
+            "_left": "387.5",
+            "_maxwidth": "300",
+            "_top": "680"
         }
     },
     "_certificateTitle": "Certificate", //certificate top navigation title

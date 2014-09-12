@@ -70,6 +70,7 @@ define(function(require) {
             question._isCorrect = true;
         });
         questionModel.isPass = true;
+        questionModel.score = _.keys( questionModel.allQuestions ).length;
         questionModel.scoreAsPercent = 100;
         setTimeout( function () {
             Adapt.trigger("assessment:complete", questionModel);

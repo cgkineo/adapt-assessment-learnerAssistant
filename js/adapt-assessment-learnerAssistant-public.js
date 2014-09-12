@@ -88,6 +88,28 @@ define(function(require) {
 			$(inputImg).bind("load", render);
 			inputImg.src = _settings._imageURL;
 
+			var isGrading = false;
+			var currentGradingLevel = undefined;
+			if (_learnerassistant._grading !== undefined && _learnerassistant._grading._isEnabled !== false) {
+				isGrading = true;
+				for (var i = 0; i < _learnerassistant._grading._levels.length; i++) {
+					var level = _learnerassistant._grading._levels[i];
+					if (level._forScoreAsPercent !== undefined && level._forScoreAsPercent._min <= _state._assessmentScoreAsPercent && level._forScoreAsPercent._max >= _state._assessmentScoreAsPercent ) {
+						currentGradingLevel = level;
+						break;
+					} else if (level._forScore !== undefined && level._forScore._min <= _state._assessmentScore && level._forScore._max >= _state._assessmentScore ) {
+						currentGradingLevel = level;
+						break;
+					}
+				}
+				if (currentGradingLevel !== undefined) {
+					_settings._gradingText.text = currentGradingLevel.displayName;
+				} else {
+					console.error("No grading level defined for score: " + _state._assessmentScoreAsPercent + "% or " + _state._assessmentScore);
+				}
+			}
+
+
 			function render() {
 				//Fetch Image Dimensions
 				var height = inputImg.naturalHeight;
@@ -109,6 +131,7 @@ define(function(require) {
 				var _titleText = _settings._titleText;
 				var _userText = _settings._userText;
 				var _dateText = _settings._dateText;
+				var _gradingText = _settings._gradingText;
 
 				context.font = _settings._textFont;
 				context.fillStyle = _settings._textColor;
@@ -133,7 +156,8 @@ define(function(require) {
 				context.fillText( _titleText.text, _titleText._left, _titleText._top,  _titleText._maxwidth);
 				context.fillText( _userText.text, _userText._left, _userText._top,  _userText._maxwidth);
 				context.fillText( _dateText.text, _dateText._left, _dateText._top,  _dateText._maxwidth);
-				
+				if (isGrading) context.fillText( _gradingText.text, _gradingText._left, _gradingText._top,  _gradingText._maxwidth);
+
 				//Create composite image as data url
 				callback(canvas.toDataURL());
 			}

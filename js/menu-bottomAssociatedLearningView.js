@@ -36,6 +36,7 @@ define(function(require) {
 				"click #la-continue" : "onNextClick",
 				"click #la-end" : "onEndClick",
 				"click #la-next" : "onNextClick",
+				"click #la-improve" : "onImproveClick",
 				"click #la-finish" : "onNextClick",
 				"click #la-print" : "onPrintClick",
 				"click .la-navigation-completion-container" : "onProgressClick",
@@ -79,6 +80,12 @@ define(function(require) {
 				event.preventDefault();
 				
 				Adapt.trigger("learnerassistant:print");
+			},
+
+			onImproveClick: function(event) {
+				event.preventDefault();
+
+				Adapt.trigger("learnerassistant:resultsOpen");
 			}
 		}
 		

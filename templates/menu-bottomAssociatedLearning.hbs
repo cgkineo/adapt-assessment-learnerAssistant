@@ -7,6 +7,9 @@
 
 			<button id="la-print" class="buttons-action" tabindex="0"><span class="mobile-only icon icon-printer"></span><span class="not-mobile">{{_learnerassistant._certificateButtons._print}}</span></button>
 			<button id="la-end" class="buttons-action not-mobile" tabindex="0"><span class="mobile-only icon icon-cross"></span><span class="not-mobile">{{_learnerassistant._certificateButtons._end}}</span></button>
+			{{#if _state._isReviewNeeded }}
+			<button id="la-improve" class="buttons-action not-mobile" tabindex="0"><span class="mobile-only icon icon-flag"></span><span class="not-mobile">{{_learnerassistant._certificateButtons._improve}}</span></button>
+			{{/if}}
 
 		{{else}}
 
