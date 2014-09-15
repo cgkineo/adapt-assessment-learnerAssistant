@@ -1,4 +1,10 @@
 /*
+* adapt-learnerassistant
+* License - http://github.com/adaptlearning/adapt_framework/LICENSE
+* Maintainers - Oliver Foster <oliver.foster@kineo.com>
+*/
+
+/*
 Requires: adapt-rollay, adapt-bottomnavigation, adapt-contrib-spoor, adapt-contrib-assessment, adapt-animate, adapt-name-input 
 
 Included files:

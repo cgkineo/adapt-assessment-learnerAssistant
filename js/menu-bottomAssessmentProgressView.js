@@ -1,7 +1,7 @@
 /*
-* Assessment Page Level Progress
+* adapt-learnerassistant
 * License - http://github.com/adaptlearning/adapt_framework/LICENSE
-* Maintainers - Chris Steele <chris.steele@kineo.com>, Gavin McMaster <gavin.mcmaster@kineo.com>
+* Maintainers - Oliver Foster <oliver.foster@kineo.com>
 */
 
 define(function(require) {
