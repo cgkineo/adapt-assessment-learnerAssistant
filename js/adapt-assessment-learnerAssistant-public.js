@@ -7,6 +7,7 @@
 define(function(require) {
 
 	var Adapt = require('coreJS/adapt');
+	var Router = require('coreJS/router');
 	var Backbone = require('backbone');
 
 	require('extensions/adapt-assessment-learnerAssistant/js/_hacks');
@@ -80,6 +81,11 @@ define(function(require) {
 		navigateToOther: function(page, replace) {
 			if (replace === undefined) replace = true;
 			Backbone.history.navigate("#/la/"+page, {trigger: false, replace: replace});
+		},
+
+		navigateToPrevious: function(replace) {
+			Adapt.router.set("_canNavigate",true);
+			Router.navigateToPreviousRoute();
 		},
 
 		certificateRender: function(_settings, callback, outputDocument) {

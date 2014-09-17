@@ -85,7 +85,7 @@ define(function(require) {
 			onImproveClick: function(event) {
 				event.preventDefault();
 
-				Adapt.trigger("learnerassistant:resultsOpen");
+				Adapt.trigger("learnerassistant:resultsOpen", true, false);
 			}
 		}
 		

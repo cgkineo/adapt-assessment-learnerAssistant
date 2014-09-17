@@ -15,6 +15,7 @@ define(function(require) {
 	var _state = learnerassistant.model.get("_state");
 	var _learnerassistant = learnerassistant.model.get("_learnerassistant");
 	var _associatedlearning =  learnerassistant.model.get('_associatedlearning');
+	var _skipNavigateAway = false;
 
 
 	//NAVIGATE AWAY GLOBAL TRIGGERS
@@ -265,7 +266,8 @@ define(function(require) {
 
 			//MOVE BACK TO MAIN MENU
 			//learnerassistant.navigateToMainMenu();
-			if (!internal) learnerassistant.navigateToOther("certificate", replace);
+			//if (!internal) 
+				learnerassistant.navigateToOther("certificate", replace);
 
 			//SHOW THE RESULTS
 			learnerassistant.panel.certificate.show();
@@ -284,7 +286,9 @@ define(function(require) {
 
 			//MOVE BACK TO MAIN MENU
 			//learnerassistant.navigateToMainMenu();
-			if (!internal) learnerassistant.navigateToOther("results", replace);
+			if (internal !== true) _skipNavigateAway = true;
+
+			learnerassistant.navigateToOther("results", replace);
 
 			//SHOW THE RESULTS
 			learnerassistant.panel.results.show(function() {
@@ -311,10 +315,18 @@ define(function(require) {
 
 		})
 
+	.on("learnerassistant:resultsClose", function(internal, replace) {
+
+		//learnerassistant.panel.results.hide();
+		_skipNavigateAway = true;
+		learnerassistant.navigateToPrevious();
+
+	})
+
 		//OPEN QUIZ VIEW
 	.on("learnerassistant:quizOpen", function() {
 
-			//learnerassistant.panel.results.hide();
+			learnerassistant.panel.results.hide(0);
 
 			_state._isInReview = false;
 			_state._isAssessmentComplete = false;
@@ -478,8 +490,8 @@ define(function(require) {
 
 			} else {
 
-				if (_state._isPanelResultsShown) learnerassistant.panel.results.hide();
-				else learnerassistant.panel.results.show();
+				if (_state._isPanelResultsShown) Adapt.trigger("learnerassistant:resultsClose", false, false);//learnerassistant.panel.results.hide();
+				else Adapt.trigger("learnerassistant:resultsOpen", false, false);//learnerassistant.panel.results.show();
 
 			}
 
@@ -530,6 +542,10 @@ define(function(require) {
 
 	//NAVIGATE AWAY FROM REVIEW OR ASSESSMENT
 	.on("learnerassistant:navigateAway", function() { 
+			if (_skipNavigateAway) {
+				_skipNavigateAway = false; 
+				return;
+			}
 
 			if ( !_state._isInReview || _state._isInAssessment  ) {
 
@@ -545,6 +561,13 @@ define(function(require) {
 
 				//RENDER AND STATUS UPDATE ON BOTTOM NAV WHEN NAVIGATE AWY FROM CURRENTASSOCIATEDLEARNINGID
 				if (_state._currentAssociatedLearningID == "") return;
+				if (_state._isPanelResultsShown) {
+					learnerassistant.panel.results.hide();
+					return;
+				} else if (_state._isPanelCertificateShown) {
+					learnerassistant.panel.certificate.hide();
+					return;
+				}
 
 	        	var currentLearningId = _state._currentAssociatedLearningID;
 	        	var top = $(window).scrollTop();
