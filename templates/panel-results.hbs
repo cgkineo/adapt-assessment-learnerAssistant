@@ -35,10 +35,10 @@
 			</div>
 			{{#with _associatedlearning}}
 				{{#each _banks }}
-					<div class="la-content-bank-row row clearfix">
+					<div class="la-content-bank-row row clearfix quizbank {{#if _isReviewComplete}}reviewed{{else}}not-reviewed{{/if}} {{#if _isPassed}}passed{{else}}not-passed{{/if}}" quizbankid="{{_quizBankID}}">
 						<div id="status" class="col">
 							<div class="col-inner">
-								<div class="cell"><div class="cell-inner">{{#if _isReviewComplete}}<span class="mobile-only icon icon-flag"></span><span class="icon icon-flag not-mobile"></span><span>{{learnerAssistantSettings '_learnerassistant._results._reviewed'}}</span>{{else}}<span class="mobile-only icon icon-flag"></span><span class="icon icon-flag not-mobile"></span><span>{{learnerAssistantSettings '_learnerassistant._results._toReview'}}</span>{{/if}}</div></div>
+								<div class="cell"><div class="cell-inner">{{#if _isReviewComplete}}{{#if _isPassed}}<span class="mobile-only icon icon-tick"></span><span class="icon icon-tick not-mobile"></span><span>{{learnerAssistantSettings '_learnerassistant._results._isPassed'}}</span>{{else}}<span class="mobile-only icon icon-book"></span><span class="icon icon-book not-mobile"></span><span>{{learnerAssistantSettings '_learnerassistant._results._reviewed'}}</span>{{/if}}{{else}}<span class="mobile-only icon icon-flag"></span><span class="icon icon-flag not-mobile"></span><span>{{learnerAssistantSettings '_learnerassistant._results._toReview'}}</span>{{/if}}</div></div>
 							</div>
 						</div>
 						<div id="question" class="col">

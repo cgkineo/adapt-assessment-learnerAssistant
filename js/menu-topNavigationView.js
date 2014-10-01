@@ -26,6 +26,7 @@ define(function(require) {
 
 			//DRAWING
 			render: function() {
+				if (!this.model) return;
 				var template = Handlebars.templates[this.template];
 				this.$el.html(template(this.model.toJSON()));
 				_.defer(_.bind(function() {

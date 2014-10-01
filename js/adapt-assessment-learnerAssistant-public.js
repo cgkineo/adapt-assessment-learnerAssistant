@@ -48,7 +48,16 @@ define(function(require) {
 
 			function complete() {
 
-					Adapt.navigateToElement("." + id, typeNameConversion[element.get("_type")] );
+					switch( element.get("_type") ) {
+					case "component":
+						var mod = Adapt.findById(id);
+						if (mod.get("displayTitle").trim() == "" && mod.get("body").trim() == "") {
+							id = mod.get("_parentId");
+						}
+
+					}
+
+					Adapt.navigateToElement("." + id);
 
 					//HIGHLIGHT CURRENT ASSOCIATED LEARNING COMPONENT
 					$("."+id).addClass("component-highlight-border");
@@ -90,32 +99,40 @@ define(function(require) {
 
 		certificateRender: function(_settings, callback, outputDocument) {
 			if (typeof outputDocument == "undefined") outputDocument = window.document;
-
-			var inputImg = outputDocument.createElement("img");
-			$(inputImg).bind("load", render);
-			inputImg.src = _settings._imageURL;
-
+			
 			var isGrading = false;
 			var currentGradingLevel = undefined;
 			if (_learnerassistant._grading !== undefined && _learnerassistant._grading._isEnabled !== false) {
 				isGrading = true;
-				for (var i = 0; i < _learnerassistant._grading._levels.length; i++) {
-					var level = _learnerassistant._grading._levels[i];
-					if (level._forScoreAsPercent !== undefined && level._forScoreAsPercent._min <= _state._assessmentScoreAsPercent && level._forScoreAsPercent._max >= _state._assessmentScoreAsPercent ) {
-						currentGradingLevel = level;
-						break;
-					} else if (level._forScore !== undefined && level._forScore._min <= _state._assessmentScore && level._forScore._max >= _state._assessmentScore ) {
-						currentGradingLevel = level;
-						break;
+				if (_learnerassistant._grading._levels) {
+	 				for (var i = 0; i < _learnerassistant._grading._levels.length; i++) {
+						var level = _learnerassistant._grading._levels[i];
+						if (level._forScoreAsPercent !== undefined && level._forScoreAsPercent._min <= _state._assessmentScoreAsPercent && level._forScoreAsPercent._max >= _state._assessmentScoreAsPercent ) {
+							currentGradingLevel = level;
+							break;
+						} else if (level._forScore !== undefined && level._forScore._min <= _state._assessmentScore && level._forScore._max >= _state._assessmentScore ) {
+							currentGradingLevel = level;
+							break;
+						} else if (_learnerassistant._finalMark === undefined && level._forCurrentMark !== undefined &&  _learnerassistant._currentMark !== undefined && level._forCurrentMark.split(" ").indexOf(_learnerassistant._currentMark._mark) > -1 ) {
+							currentGradingLevel = level;
+							break;
+						} else if (level._forFinalMark !== undefined &&  _learnerassistant._finalMark !== undefined && level._forFinalMark.split(" ").indexOf(_learnerassistant._finalMark._mark) > -1 ) {
+							currentGradingLevel = level;
+							break;
+						}
 					}
 				}
-				if (currentGradingLevel !== undefined) {
-					_settings._gradingText.text = currentGradingLevel.displayName;
-				} else {
-					console.error("No grading level defined for score: " + _state._assessmentScoreAsPercent + "% or " + _state._assessmentScore);
+				if (currentGradingLevel !== undefined && currentGradingLevel.displayGrade !== undefined) {
+					_settings._gradingText.text = currentGradingLevel.displayGrade;
+				}
+				if (currentGradingLevel !== undefined && currentGradingLevel._certificateImageURL !== undefined) {
+					_settings._imageURL = currentGradingLevel._certificateImageURL;
 				}
 			}
 
+			var inputImg = outputDocument.createElement("img");
+			$(inputImg).bind("load", render);
+			inputImg.src = _settings._imageURL;
 
 			function render() {
 				//Fetch Image Dimensions
@@ -211,6 +228,7 @@ define(function(require) {
 						var _associatedlearning = learnerassistant.model.get("_associatedlearning");
 						_.each(_associatedlearning._questions, function(question) {
 							learnerassistant.listenTo( Adapt.findById(question._id), "change:_isInteractionsComplete", function(model, isInteractionsComplete) {
+								if (_state._isAssessmentComplete) return;
 								Adapt.bottomnavigation.render();
 							});
 						});
@@ -450,6 +468,7 @@ define(function(require) {
 		}
 	}))();
 
+	
 	var _state = learnerassistant.model.get("_state");
 	var _learnerassistant = learnerassistant.model.get("_learnerassistant");
 
@@ -470,6 +489,10 @@ define(function(require) {
 	});
 
 	Adapt.learnerassistant = learnerassistant;
+
+	
+
+
 	return learnerassistant;
 
 });

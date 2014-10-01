@@ -30,7 +30,8 @@ define(function(require) {
 
 			//EVENTS
 			events : {
-				'click .la-close': 'onCloseClick'
+				'click .la-close': 'onCloseClick',
+				"click .quizbank.not-passed.not-reviewed": "onQuizBankClick"
 			},
 
 			onCloseClick: function(event) {
@@ -39,6 +40,17 @@ define(function(require) {
 				Adapt.trigger("learnerassistant:reviewEnd");
 
 
+			},
+
+			onQuizBankClick: function(event) {
+				event.preventDefault();
+				var quizbankid = $(event.currentTarget).attr("quizbankid");
+				if (!this.model.get("_state")._isInReview) {
+					Adapt.trigger("learnerassistant:reviewBegin", quizbankid);
+				} else {
+					Adapt.trigger("learnerassistant:reviewNext", quizbankid);
+				}
+				Adapt.trigger("learnerassistant:quizBankChanged");
 			}
 
 		}

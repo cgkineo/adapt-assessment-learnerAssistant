@@ -10,7 +10,7 @@ define(function(require) {
 
 	var priv = {
 
-		phase1: function(questionModel) {
+		collateQuestions: function(questionModel) {
 
 			//REMOVE REVIEW COMPONENT INTERACTION EVENTS
 			priv.detachReviewPathInteractionEvents.call(this);
@@ -20,7 +20,7 @@ define(function(require) {
 
 		},
 
-		phase2: function() {
+		calculateReviewPath: function() {
 
 			priv.expandQuestionsAssociatedLearning.call(this); //CO + A + B > C
 
@@ -62,12 +62,54 @@ define(function(require) {
 			var _learnerassistant = this.get("_learnerassistant");
 
 			//PICK OUT PASSED AND FAILED QUESTION BANKS
-			var failedBanks = _.filter(questionModel.allBanks, function(bank) { 
-				return _.filter(bank.allQuestions, function(question) { 
-					var isQuestionIncorrect = typeof question._isCorrect == "undefined" || question._isCorrect === false;
-					return isQuestionIncorrect; 
-				}).length > 0; //INCLUDE BANKS WITH ONE OR MORE FAILED QUESTIONS
-			});
+			var failedBanks;
+			if (_learnerassistant._showPassedBanks) {
+				failedBanks = questionModel.allBanks;
+				_.each(_banks, function(item, key) {
+					if (failedBanks[key] === undefined) {
+						failedBanks[key] = {
+							title: item.title, 
+							_questions: [],
+							_isPassed: true,
+							_quizBankID: key,
+							_order: 0
+						};
+					}
+				});
+			} else {
+				failedBanks = _.filter(questionModel.allBanks, function(bank, key) { 
+					if (key == "undefined") return;
+					return _.filter(bank.allQuestions, function(question) { 
+						var isQuestionIncorrect = typeof question._isCorrect == "undefined" || question._isCorrect === false;
+						return isQuestionIncorrect; 
+					}).length > 0; //INCLUDE BANKS WITH ONE OR MORE FAILED QUESTIONS
+				});
+			}
+
+			
+
+			if (_learnerassistant._doesAssessmentRemovePassedAssessmentBanks) {
+				var passedBanks = _.filter(questionModel.allBanks, function(bank, key) { 
+					if (key == "undefined") return;
+					return _.filter(bank.allQuestions, function(question) { 
+						var isQuestionIncorrect = typeof question._isCorrect == "undefined" || question._isCorrect === false;
+						return isQuestionIncorrect; 
+					}).length === 0; //INCLUDE BANKS WITH NO FAILED QUESTIONS
+				});
+
+				var _assessment = _state._views['assessment'].model.get("_assessment");
+
+				var bankQuestions = _assessment._banks._split.split(",");
+
+				_.each(passedBanks, function(pb) {
+					bankQuestions[pb._quizBankID-1] = 0;
+				});
+				
+				_assessment._banks._split = bankQuestions.join(",");
+
+				console.log(_assessment._banks);
+
+			}
 
 			//BUILD ASSOCIATED LEARNING BANK AND QUESTION LISTS
 			_associatedlearning._banks = [];
@@ -75,14 +117,17 @@ define(function(require) {
 				//ONLY SELECT FAILED QUESTIONS
 
 				//BUILD BANKS FOR ASSOCIATED LEARNING
-				_.each(failedBanks, function(bank) {
+				_.each(failedBanks, function(bank, key) {
+					if (key == "undefined") return;
+					var _questions = _.filter(bank.allQuestions, function(question) { 
+								var isQuestionIncorrect = typeof question._isCorrect == "undefined" || question._isCorrect === false;
+								return isQuestionIncorrect; 
+							});
 					_associatedlearning._banks.push(
 						{ 
 							title: bank.title, 
-							_questions: _.filter(bank.allQuestions, function(question) { 
-								var isQuestionIncorrect = typeof question._isCorrect == "undefined" || question._isCorrect === false;
-								return isQuestionIncorrect; 
-							}),
+							_questions: _questions,
+							_isPassed: _questions.length === 0,
 							_quizBankID: bank._quizBankID,
 							_order: failedBanks.length
 						}
@@ -101,11 +146,13 @@ define(function(require) {
 				_associatedlearning._questions = [];
 				
 				//BUILD BANKS FOR ASSOCIATED LEARNING
-				_.each(failedBanks, function(bank) {
+				_.each(failedBanks, function(bank, key) {
+					if (key == "undefined") return;
 					_associatedlearning._banks.push(
 						{ 
 							title: bank.title, 
 							_questions: bank.allQuestions,
+							_isPassed: false,
 							_quizBankID: bank._quizBankID,
 							_order: failedBanks.length
 						}
@@ -120,6 +167,7 @@ define(function(require) {
 			//UPDATE STATE
 			_state._countBanksForReview = failedBanks.length;
 			_state._isReviewNeeded = (failedBanks.length > 0);
+
 
 		},
 		
@@ -196,9 +244,13 @@ define(function(require) {
 						_path[component._id] = component;
 
 					}
-					component._quizBankID = question._quizBankID;
+					if (_path[component._id]._quizBankID === undefined) _path[component._id]._quizBankID = [ question._quizBankID ];
+					else _path[component._id]._quizBankID.push(question._quizBankID); 
 
-					if (typeof component._interactions == "undefined") component._interactions = 0;
+						//question._associatedLearning[index]._quizBankID = question._quizBankID;
+						//component._quizBankID = question._quizBankID;
+
+					if (typeof _path[component._id]._interactions == "undefined") _path[component._id]._interactions = 0;
 
 				});
 			});
@@ -223,6 +275,9 @@ define(function(require) {
 					modelHandle.listenTo( Adapt.findById(component._id), "change:_isInteractionsComplete", function (model, isInteractionsComplete) {
 						priv.onInteraction.call(modelHandle, model, isInteractionsComplete); 
 					});
+					modelHandle.listenTo( Adapt, "learnerassistant:quizBankChanged", function() {
+						priv.calculateReviewed.call(modelHandle);
+					})
 
 				});
 
@@ -292,6 +347,8 @@ define(function(require) {
 
 					//POSSIBLE BUG / DEFINITE LOGIC ERROR:
 					// each question only has one bank id but can exist in more than one bank which gives unfair representation to some banks and so effects sort order
+					//fixed by removal
+					break;
 
 					var newBankOrder = {};
 					var order = 0;
@@ -320,6 +377,7 @@ define(function(require) {
 
 			var resultsViewHandle = this;
 			var _state = this.get('_state');
+			var _learnerassistant = this.get('_learnerassistant');
 			var _associatedlearning = this.get('_associatedlearning');
 			_state._isReviewComplete = true;
 			_state._countTotalAssociatedLearning = 0;
@@ -350,7 +408,18 @@ define(function(require) {
 				}
 			});
 
-			_state._percentageReviewedAssociateLearning = (100/ _state._countTotalAssociatedLearning) * _state._countReviewedAssociatedLearning;
+			if (_learnerassistant._showAssociatedLearningByBank) {
+				var components = _.filter( _associatedlearning._path, function(assoc) {
+					if (assoc._quizBankID.indexOf(_state._currentQuizBankID) == -1) return false;
+					return true;
+				});
+				var reviewed = _.filter(components, function(component) {
+					 return component._interactions > 0;
+				});
+				_state._percentageReviewedAssociateLearning = (100/ components.length) * reviewed.length;
+			} else {
+				_state._percentageReviewedAssociateLearning = (100/ _state._countTotalAssociatedLearning) * _state._countReviewedAssociatedLearning;
+			}
 
 		}
 	};

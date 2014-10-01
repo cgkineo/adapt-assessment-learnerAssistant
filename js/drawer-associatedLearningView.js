@@ -25,9 +25,16 @@ define(function(require) {
 
 			//DRAWING
 			render: function() {
-				
+				var model = $.extend(true, {}, this.model.toJSON());
+				if (model._learnerassistant._showAssociatedLearningByBank) {
+					var currentQuizBankID = model._state._currentQuizBankID;
+					model._associatedlearning._path = _.filter(model._associatedlearning._path, function(path) {
+						if (path._quizBankID.indexOf(currentQuizBankID) > -1) return true;
+						return false;
+					});
+				}
 				var template = Handlebars.templates[this.template];
-				this.$el.html(template(this.model.toJSON()));
+				this.$el.html(template(model));
 			},
 
 			//EVENTS

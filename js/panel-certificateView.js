@@ -71,8 +71,9 @@ define(function(require) {
 
 			}
 
-			if (_settings._rendered !== undefined) complete(_settings._rendered);
-			else Adapt.learnerassistant.certificateRender(_settings, complete );
+			//if (_settings._rendered !== undefined) complete(_settings._rendered);
+			//else 
+				Adapt.learnerassistant.certificateRender(_settings, complete );
 
 		},
 	

@@ -16,9 +16,9 @@
 		{{else}}
 
 			
-			<button id="la-finish" class="buttons-action {{#if _state._isReviewInteractionComplete}}button-highlight-border{{/if}}" {{#unless _state._isReviewInteractionComplete}}disabled{{/unless}} tabindex="0"><span class="mobile-only icon icon-tick"></span><span class="not-mobile">{{_learnerassistant._guidedLearningButtons._finish}}</span></button>
-			<button id="la-revision" class="buttons-action" tabindex="0"><span class="mobile-only icon icon-triangle-right"></span><span class="not-mobile">{{_learnerassistant._guidedLearningButtons._start}}</span></button>
-			<button id="la-continue" class="buttons-action" tabindex="0"><span class="mobile-only icon icon-triangle-right"></span><span class="not-mobile">{{_learnerassistant._guidedLearningButtons._continue}}</span></button>
+			<button id="la-finish" class="buttons-action {{#if _state._isReviewInteractionComplete}}button-highlight-border{{/if}}" {{#unless _state._isReviewInteractionComplete}}{{#unless _state._isReviewComplete}}disabled{{/unless}}{{/unless}} tabindex="0"><span class="mobile-only icon icon-tick"></span><span class="not-mobile">{{_learnerassistant._guidedLearningButtons._finish}}</span></button>
+			{{#unless _learnerassistant._showAssociatedLearningByBank}}<button id="la-revision" class="buttons-action" tabindex="0"><span class="mobile-only icon icon-triangle-right"></span><span class="not-mobile">{{_learnerassistant._guidedLearningButtons._start}}</span></button>
+			<button id="la-continue" class="buttons-action" tabindex="0"><span class="mobile-only icon icon-triangle-right"></span><span class="not-mobile">{{_learnerassistant._guidedLearningButtons._continue}}</span></button>{{/unless}}
 			<button id="la-end" class="buttons-action not-mobile" tabindex="0"><span class="mobile-only icon icon-cross"></span><span class="not-mobile">{{_learnerassistant._guidedLearningButtons._end}}</span></button>
 			<button id="la-next" class="buttons-action {{#if _state._isReviewInteractionComplete}}button-highlight-border{{/if}}" {{#unless _state._isReviewInteractionComplete}}disabled{{/unless}} tabindex="0"><span class="mobile-only icon icon-triangle-right"></span><span class="not-mobile">{{_learnerassistant._guidedLearningButtons._next}}</span></button>
 			<button id="la-print" class="buttons-action" tabindex="0"><span class="mobile-only icon icon-printer"></span><span class="not-mobile">{{_learnerassistant._resultsButtons._print}}</span></button>

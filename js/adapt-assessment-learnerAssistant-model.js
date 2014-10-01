@@ -78,7 +78,7 @@ define(function(require) {
 				_state._isReviewComplete = false;
 				_state._isReviewNeeded = false;
 
-				$.extend(this.get("_learnerassistant"), Adapt.course.get("_learnerassistant"));
+				//$.extend(this.get("_learnerassistant"), Adapt.course.get("_learnerassistant"));
 				$.extend(this.get("_banks"), Adapt.course.get("_banks"));
 
 				this.update(questionModel);
@@ -114,14 +114,14 @@ define(function(require) {
 				_state._assessmentScore = questionModel.score;
 				_state._assessmentScoreAsPercent = questionModel.scoreAsPercent;
 
-				priv.phase1.call(this, questionModel);
+				priv.collateQuestions.call(this, questionModel);
 				
 				//CANCEL IF ASSESSMENT IS NOT COMPLETE
 				_state._isInitialised = true;
 				
 				if (!_state._isAssessmentComplete) return;
 
-				priv.phase2.call(this);
+				priv.calculateReviewPath.call(this);
 				
 			}
 		}		

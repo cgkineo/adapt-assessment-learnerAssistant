@@ -20,7 +20,7 @@ define(function(require) {
     
 
 //UPDATE BOTTOM NAV WITH ASSESSMENT INTERACTIONS
-    window.LABottomNavUpdater = function() {
+   /* window.LABottomNavUpdater = function() {
        
 
         //BACKBONE SOMETIMES DOESN'T FIRED QUEUED CHANGE EVENTS ON MODELS
@@ -47,7 +47,7 @@ define(function(require) {
             }
 
         });
-    };
+    };*/
 
 
 

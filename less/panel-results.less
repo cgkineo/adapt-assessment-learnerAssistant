@@ -127,6 +127,13 @@
         }
 
         .la-content-bank-row {
+
+            &.not-reviewed.not-passed {
+                cursor: pointer;
+            }
+            &.reviewed, &.passed {
+                cursor: not-allowed;
+            }
             
             .adapt-border-radius(10px);
             background: rgb(255,255,255);
@@ -152,6 +159,13 @@
                             padding-left: 0;                            
                         }
                         &.icon-book {
+                            color: @guided-primary-color;
+                            display: block;
+                            margin-left: -2px;
+                            margin-top: -5px;
+                            padding-left: 0;                            
+                        }    
+                        &.icon-tick {
                             color: @guided-primary-color;
                             display: block;
                             margin-left: -2px;

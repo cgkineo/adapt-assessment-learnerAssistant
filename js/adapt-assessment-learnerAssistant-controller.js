@@ -29,8 +29,12 @@ define(function(require) {
 
 		});
 
+	Adapt.on("app:dataReady", function() {
+		$.extend(_learnerassistant, Adapt.course.get("_learnerassistant"));
+	})
+
 		//BACK BUTTON CLICKED OR CHANGE TO MENU SCREEN
-	Adapt.on("router:menu",  function () { 
+	.on("router:menu",  function () { 
 
 			var isInReview = _state._isInReview;
 			var isInAssessment = _state._isInAssessment;
@@ -103,7 +107,7 @@ define(function(require) {
 				_state._canAssessmentShowFeedback = articleView.model.get('_assessment')._canShowFeedback;
 
 				//HACK FIX
-				window.LABottomNavUpdater();
+				//window.LABottomNavUpdater();
 
 				var questionModel = articleView.model.get("assessmentModel").getQuestionModel();
 
@@ -212,6 +216,19 @@ define(function(require) {
 		
 	})
 
+	.on("learnerassistant:gradeChanged", function(grade) {
+		_learnerassistant._certificateGraphics._gradingText.text = grade;
+	})
+
+	.on("learnerassistant:currentMarkChanged", function(_currentMark) {
+		_learnerassistant._currentMark = _currentMark;
+	})
+
+	.on("learnerassistant:finalMarkChanged", function(_finalMark) {
+		_learnerassistant._finalMark = _finalMark;
+	})
+
+
 
 	//MAIN MENU REDIRECT
 	.on('menuView:postRender', function(menuView) {
@@ -232,17 +249,33 @@ define(function(require) {
 			var menuItemElement = menuView.$el;
 			
 			//REDIRECT CLICK EVENT TO CERTIFICATE
-			menuItemElement.on("click", function(event) {
+			if (menuModelLASection._redirectSelector) {
+				menuItemElement.find(menuModelLASection._redirectSelector).on("click", function(event) {
 
-				//CANCEL IF IS NOT PASSED
-				if (! _state._isAssessmentPassed ) return;
-				
-				//TURN OFF CLICK EVENTS ON MENU ITEM
-				event.preventDefault();
-				event.stopPropagation();
-				Adapt.trigger("learnerassistant:certificateOpen");
+					//CANCEL IF IS NOT PASSED
+					if (! _state._isAssessmentPassed ) return;
+					
+					//TURN OFF CLICK EVENTS ON MENU ITEM
+					event.preventDefault();
+					event.stopPropagation();
+					Adapt.trigger("learnerassistant:certificateOpen");
 
-			});
+					$(".menu-item-inner").removeClass("show-item");
+
+				});
+			} else {
+				menuItemElement.on("click", function(event) {
+
+					//CANCEL IF IS NOT PASSED
+					if (! _state._isAssessmentPassed ) return;
+					
+					//TURN OFF CLICK EVENTS ON MENU ITEM
+					event.preventDefault();
+					event.stopPropagation();
+					Adapt.trigger("learnerassistant:certificateOpen");
+
+				});
+			}
 
 		})
 
@@ -360,9 +393,10 @@ define(function(require) {
 
 		})
 
-	.on("learnerassistant:reviewBegin", function() {
+	.on("learnerassistant:reviewBegin", function(quizBankID) {
 
 			var _notify = _learnerassistant._beginRevision;
+			_state._currentQuizBankID = parseInt(quizBankID);
 
 			if (!_notify._show) {
 				Adapt.trigger("learnerassistant:reviewNext");
@@ -380,15 +414,27 @@ define(function(require) {
 			Adapt.trigger('notify:alert', alertObject);
 		})
 
-	.on("learnerassistant:reviewNext", function() {
+	.on("learnerassistant:reviewNext", function(quizBankID) {
 
+			if (quizBankID !== undefined && typeof quizBankID !== "object") _state._currentQuizBankID = parseInt(quizBankID);
 			_state._isInReview = true;
 			_state._isReviewInteractionComplete = false;
 
-			var component = _.findWhere( _associatedlearning._path, { _interactions: 0 });
+			var component;
+
+			if (_learnerassistant._showAssociatedLearningByBank) {
+				component = _.filter( _associatedlearning._path, function(assoc) {
+								if (assoc._interactions !== 0) return false;
+								if (assoc._quizBankID.indexOf(_state._currentQuizBankID) == -1) return false;
+								return true;
+							})[0];
+			} else {
+				component = _.findWhere( _associatedlearning._path, { _interactions: 0 });
+			}
+			
 
 		
-			if (_state._isReviewComplete || typeof component == "undefined") {
+			if (_state._isReviewComplete && (!_learnerassistant._showAssociatedLearningByBank || _learnerassistant._showAssociatedLearningByBank && _state._isPanelResultsShown)) {
 				//FINISHED
 
 				var _notify = _learnerassistant._endRevision;
@@ -410,6 +456,10 @@ define(function(require) {
 					Adapt.trigger('notify:alert', alertObject);
 
 				}
+
+			} else if ( typeof component == "undefined") {
+
+				Adapt.trigger("learnerassistant:resultsOpen", false, true);
 
 			} else {
 

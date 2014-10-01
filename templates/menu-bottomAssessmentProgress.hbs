@@ -2,12 +2,12 @@
 	<a href="#" class="la-tutor-button icon-feedback icon clickstyle"></a>
 	{{#if _learnerassistant._menuBottomAssessmentProgress._showInvisible}}
 	    {{#each _questions}}
-	            <a class="la-assess-prog-item {{#if _isInteractionsComplete }}{{#if _isCorrect}}correct{{else}}incorrect{{/if}}{{/if}} {{#if _isComplete}}complete{{else}}incomplete{{/if}}" href="#" data-la-assess-prog-id="{{_id}}"><span class="answered icon icon-radio-checked"></span><span class="unanswered icon icon-radio-unchecked"></span><span class="incorrect icon icon-cross"></span><span class="correct icon icon-tick"></span></a>
+	            <a class="la-assess-prog-item {{#if _isInteractionsComplete }}{{#if _isCorrect}}correct{{else}}incorrect{{/if}}{{/if}} {{#if _isInteractionsComplete}}complete{{else}}incomplete{{/if}}" href="#" data-la-assess-prog-id="{{_id}}"><span class="answered icon icon-radio-checked"></span><span class="unanswered icon icon-radio-unchecked"></span><span class="incorrect icon icon-cross"></span><span class="correct icon icon-tick"></span></a>
 	    {{/each}}
 	{{else}}
 		{{#each _questions}}
 	        {{#if _isVisible}}
-	            <a class="la-assess-prog-item {{#if _isInteractionsComplete }}{{#if _isCorrect}}correct{{else}}incorrect{{/if}}{{/if}} {{#if _isComplete}}complete{{else}}incomplete{{/if}}" href="#" data-la-assess-prog-id="{{_id}}">{{else}} <span>{{/if}}<span class="answered icon icon-radio-checked"></span><span class="unanswered icon icon-radio-unchecked"></span><span class="incorrect icon icon-cross"></span><span class="correct icon icon-tick"></span>{{#if _isVisible}}</a>{{else}}</span>
+	            <a class="la-assess-prog-item {{#if _isInteractionsComplete }}{{#if _isCorrect}}correct{{else}}incorrect{{/if}}{{/if}} {{#if _isInteractionsComplete}}complete{{else}}incomplete{{/if}}" href="#" data-la-assess-prog-id="{{_id}}">{{else}} <span>{{/if}}<span class="answered icon icon-radio-checked"></span><span class="unanswered icon icon-radio-unchecked"></span><span class="incorrect icon icon-cross"></span><span class="correct icon icon-tick"></span>{{#if _isVisible}}</a>{{else}}</span>
 	        {{/if}}
 	    {{/each}}
 	{{/if}}
