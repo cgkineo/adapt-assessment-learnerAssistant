@@ -57,7 +57,11 @@ Included files:
 	learnerassistant:assessmentFailed
 	learnerassistant:certificateOpen
 	learnerassistant:certificatePrint
+	learnerassistant:gradeChanged(grade)
+	learnerassistant:currentMarkChanged(currentMark)
+	learnerassistant:finalMarkChanged(finalMark)
 	learnerassistant:navigateAway
+	learnerassistant:quizBankChanged
 	learnerassistant:quizOpen
 	learnerassistant:resultsOpen
 	learnerassistant:resultsPrint
@@ -70,6 +74,14 @@ Included files:
 	learnerassistant:reviewOff
 	learnerassistant:reviewOn
 	learnerassistant:tutorOpen
+
+	grade = "gradename"  
+	currentMark = {  
+		_mark: "markname"  
+	}  
+	finalMark = {  
+		_mark: "markname"  
+	}  
 ```
 
 ###LearnerAssistant Triggers Additional Events
@@ -86,6 +98,8 @@ Included files:
 ```
 	navigateToId(id)
 	navigateToMainMenu()
+	navigateToOther(page, replace)
+	navigateToPrevious(replace)
 
 	certificateRender(_settings, callback, ownerDocument)
 
@@ -150,11 +164,40 @@ Included files:
 	],
 	"_learnerassistant": { //linked directly from course.json "_learnerassistant", specified by user
 		"_canPromptForName": true,
-		"_canImproveGrade": true,
-		"_grading": {
-	        "_isEnabled": true,
-	        "_levels": [
-	            {
+        "_canImproveGrade": true,
+        "_showPassedBanks": true,
+        "_doesAssessmentRemovePassedAssessmentBanks": true,
+        "_showAssociatedLearningByBank": true,
+        "_grading": {
+            "_isEnabled": true,
+            "_levels": [
+                {
+                    "_forFinalMark": "fail",
+                    "_certificateImageURL": "assets/certificate-fail.png"
+                    ,
+                    "displayGrade": "Ungraded"
+                },
+                {
+                    "_forFinalMark": "bronze",
+                    "_certificateImageURL": "assets/certificate-bronze.png",
+                    "displayGrade": "Bronze"
+                },
+                {
+                    "_forFinalMark": "silver",
+                    "_certificateImageURL": "assets/certificate-silver.png",
+                    "displayGrade": "Silver"
+                },
+                {
+                    "_forFinalMark": "gold",
+                    "_certificateImageURL": "assets/certificate-gold.png",
+                    "displayGrade": "Gold"
+                },
+                {
+                    "_forCurrentMark": "fail bronze silver gold",
+                    "_certificateImageURL": "assets/certificate-fail.png",
+                    "displayGrade": "Ungraded"
+                },
+                {
 	                "_forScoreAsPercent": {
 	                    "_min": 80,
 	                    "_max": 89
@@ -175,8 +218,8 @@ Included files:
 	                },
 	                "displayName": "Gold"
 	            }
-	        ]
-	    },
+            ]
+        },
 		"_beforeCertificate": {
 			"_show": true,
 			"body": "%",
